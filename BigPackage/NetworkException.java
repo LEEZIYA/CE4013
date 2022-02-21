@@ -1,4 +1,5 @@
-package Server;
+package BigPackage;
+
 
 public class NetworkException extends Exception{
     

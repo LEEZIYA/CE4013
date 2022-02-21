@@ -1,11 +1,12 @@
-package Server;
-
+package BigPackage;
 // int (32-bit), short (16-bit), enum (8-bit), float (32-bit)
 // bit size of these data types should be same for C
 // TBD is the character encoding
 
-class MarshUtil{
-    static byte[] marshInt(Integer data, boolean littleEndian) {    
+// TODO: add concatenation
+
+public class MarshUtil{
+    public static byte[] marshInt(Integer data, boolean littleEndian) {    
         byte[] result = new byte[4];
         if (littleEndian){
             result[3] = (byte) ((data & 0xFF000000) >> 24);
@@ -21,7 +22,14 @@ class MarshUtil{
         return result;
     }
 
-    static Integer unmarshInt(byte[] data, boolean littleEndian, int offset){
+
+    // static byte[] concatenate(byte[] a, byte[] b){
+    //     int totalLength = a.length + b.length;
+    //     byte[] result = new byte[totalLength];
+        
+    // }
+
+    public static Integer unmarshInt(byte[] data, boolean littleEndian, int offset){
         Integer result = 0;
         if (littleEndian){
             result += (data[offset + 3] << 24) & 0xFF000000;
@@ -37,7 +45,7 @@ class MarshUtil{
         return result;
     }
 
-    static byte[] marshShort(short data, boolean littleEndian) {    
+    public static byte[] marshShort(short data, boolean littleEndian) {    
         byte[] result = new byte[2];
         if (littleEndian){
             result[1] = (byte) ((data & 0x0000FF00) >> 8);
@@ -67,7 +75,7 @@ class MarshUtil{
         return result;
     }
 
-    static CurrencyType unmarshCType(byte[] data, int offset){
+    public static CurrencyType unmarshCType(byte[] data, int offset){
         return CurrencyType.values()[(int) data[offset]];
     }
 
@@ -84,7 +92,7 @@ class MarshUtil{
         return result;
     }
 
-    static String unmarshString(byte[] data, boolean littleEndian, int offset){
+    public static String unmarshString(byte[] data, boolean littleEndian, int offset){
         String result = "";
         short strLen = unmarshShort(data, littleEndian, offset);
         // encoding?
@@ -97,17 +105,17 @@ class MarshUtil{
         return result;
     }
 
-    static char[] unmarshCharArray(byte[] data, int length, int offset){
+    public static char[] unmarshCharArray(byte[] data, int length, int offset){
         char[] result = new char[length];
         return result;
     }
 
-    static byte[] marshFloat(float data, boolean littleEndian){
+    public static byte[] marshFloat(float data, boolean littleEndian){
         int floatInt = Float.floatToRawIntBits(data);
         return marshInt(floatInt, littleEndian);
     }
 
-    static float unmarshFloat(byte[] data, boolean littleEndian, int offset){
+    public static float unmarshFloat(byte[] data, boolean littleEndian, int offset){
         int floatInt = unmarshInt(data, littleEndian, offset);
         return Float.intBitsToFloat(floatInt);
     }

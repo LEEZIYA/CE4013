@@ -1,4 +1,8 @@
-package Server;
+package BigPackage.Server;
+
+import BigPackage.CurrencyType;
+import BigPackage.NetworkException;
+import BigPackage.RequestException;
 
 public class Servant {
 

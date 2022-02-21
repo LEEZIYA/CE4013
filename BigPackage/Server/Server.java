@@ -1,4 +1,9 @@
-package Server;
+package BigPackage.Server;
+
+import BigPackage.CurrencyType;
+import BigPackage.MarshUtil;
+import BigPackage.NetworkException;
+import BigPackage.RequestException;
 
 public class Server {
 
@@ -48,6 +53,9 @@ public class Server {
         // unpack Request
         // run different function depending on the requestType
         // wrap return value in Response
+
+        
+
     }
 
 }
