@@ -6,7 +6,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Scanner;
+//import java.util.Scanner;
 
 import BigPackage.BufferPointer;
 import BigPackage.MarshUtil;
@@ -32,7 +32,7 @@ public class UdpUnicastServer implements Runnable {
          * one in the 49152 - 65535 range, which are allocated for internal applications
          */
 
-         Scanner sc = new Scanner(System.in);
+         //Scanner sc = new Scanner(System.in);
          int testData = 123;
          byte[] buf = new byte[4];
          BufferPointer bufPt = new BufferPointer();
