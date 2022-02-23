@@ -1,6 +1,7 @@
 package BigPackage.Client;
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
 public class Client2{
     
@@ -18,13 +19,17 @@ public class Client2{
     String hostname = "localhost";
     int port = Integer.parseInt(args[1]);
 
+    Scanner sc = new Scanner(System.in);
+
     try{
         InetAddress address = InetAddress.getByName(hostname);
         DatagramSocket socket = new DatagramSocket();
 
         System.out.println("Sent!");
 
-        while(true){
+        int x = 1;
+
+        while(x!=0){
 
             DatagramPacket request = new DatagramPacket(new byte[1],1,address,port);
             socket.send(request);
@@ -43,6 +48,10 @@ public class Client2{
             System.out.println();
 
             Thread.sleep(100);
+
+            System.out.println("Press NO to stop else go on.");
+            if(sc.nextLine().equals("NO"))
+                x = 0;
 
         }
     } catch (SocketTimeoutException ex) {
