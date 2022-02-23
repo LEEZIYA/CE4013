@@ -2,63 +2,54 @@ package BigPackage.Server;
 import java.io.*;
 import java.net.*;
 
-public class Server2 {
+public class Server2{
 
+	private DatagramSocket socket;
+ 
+	public Server2(int port) throws SocketException {
+        socket = new DatagramSocket(port);
+    }
 
-	public static void main(String args[])
-		throws Exception
-	{
+	public static void main(String[] args) {
+        if (args.length < 1) {
+            System.out.println("Syntax: QuoteServer <file> <port>");
+            return;
+        }
+ 
+        int port = Integer.parseInt(args[0]);
+ 
+        try {
+            Server2 server = new Server2(port);
+            server.service();
+        } catch (SocketException ex) {
+            System.out.println("Socket error: " + ex.getMessage());
+        } catch (IOException ex) {
+            System.out.println("I/O error: " + ex.getMessage());
+        }
+    }
 
-		// Create server Socket
-		ServerSocket ss = new ServerSocket(888);
+	private void service() throws IOException {
+        while (true) {
 
-		// connect it to client socket
-		Socket s = ss.accept();
-		System.out.println("Connection established");
+            System.out.println("BANK!");
+            DatagramPacket request = new DatagramPacket(new byte[1], 1);
+            socket.receive(request);
+            System.out.println("GOTTEM");
+ 
+            String quote = getRandomQuote();
+            byte[] buffer = quote.getBytes();
+ 
+            InetAddress clientAddress = request.getAddress();
+            int clientPort = request.getPort();
+ 
+            DatagramPacket response = new DatagramPacket(buffer, buffer.length, clientAddress, clientPort);
+            socket.send(response);
+        }
+    }
 
-		// to send data to the client
-		PrintStream ps
-			= new PrintStream(s.getOutputStream());
-
-		// to read data coming from the client
-		BufferedReader br
-			= new BufferedReader(
-				new InputStreamReader(
-					s.getInputStream()));
-
-		// to read data from the keyboard
-		BufferedReader kb
-			= new BufferedReader(
-				new InputStreamReader(System.in));
-
-		// server executes continuously
-		while (true) {
-
-			String str, str1;
-
-			// repeat as long as the client
-			// does not send a null string
-
-			// read from client
-			while ((str = br.readLine()) != null) {
-				System.out.println(str);
-				str1 = kb.readLine();
-
-				// send to client
-				ps.println(str1);
-			}
-
-			// close connection
-			ps.close();
-			br.close();
-			kb.close();
-			ss.close();
-			s.close();
-
-			// terminate application
-			System.exit(0);
-
-		} // end of while
+	private String getRandomQuote(){
+		String SSS = "Return application logic response.";
+		return SSS;
 	}
 }
 
