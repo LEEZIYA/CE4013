@@ -1,37 +1,42 @@
 package BigPackage;
-// int (32-bit), short (16-bit), enum (8-bit), float (32-bit)
-// bit size of these data types should be same for C
-// TBD is the character encoding
 
-// TODO: add concatenation
+
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
+/* 
+Marshalling:
+Initialize a buffer with the correct size. 
+Sequentially add in the bytes with MarshUtil.marshX(data, buffer, offset). Increment offset after each marshalling. 
+Unmarshalling:
+Sequentially read the bytes with MarshUtil.unmarshX(data, buffer, offset). Increment offset after each unmarshalling. 
+*/
 
 public class MarshUtil{
-    public static byte[] marshInt(Integer data, boolean littleEndian) {    
-        byte[] result = new byte[4];
-        if (littleEndian){
-            result[3] = (byte) ((data & 0xFF000000) >> 24);
-            result[2] = (byte) ((data & 0x00FF0000) >> 16);
-            result[1] = (byte) ((data & 0x0000FF00) >> 8);
-            result[0] = (byte) ((data & 0x000000FF) >> 0);
+
+    public static boolean LITTLE_ENDIAN = true;
+    public static Charset CHARSET = StandardCharsets.UTF_8;
+
+    public static void marshInt(Integer data, byte[] out, BufferPointer bufPt) {    
+        int offset = bufPt.at;
+        if (LITTLE_ENDIAN){
+            out[offset+3] = (byte) ((data & 0xFF000000) >> 24);
+            out[offset+2] = (byte) ((data & 0x00FF0000) >> 16);
+            out[offset+1] = (byte) ((data & 0x0000FF00) >> 8);
+            out[offset+0] = (byte) ((data & 0x000000FF) >> 0);
         } else {
-            result[0] = (byte) ((data & 0xFF000000) >> 24);
-            result[1] = (byte) ((data & 0x00FF0000) >> 16);
-            result[2] = (byte) ((data & 0x0000FF00) >> 8);
-            result[3] = (byte) ((data & 0x000000FF) >> 0);
+            out[offset+0] = (byte) ((data & 0xFF000000) >> 24);
+            out[offset+1] = (byte) ((data & 0x00FF0000) >> 16);
+            out[offset+2] = (byte) ((data & 0x0000FF00) >> 8);
+            out[offset+3] = (byte) ((data & 0x000000FF) >> 0);
         }
-        return result;
+        bufPt.at += 4;
     }
 
-
-    // static byte[] concatenate(byte[] a, byte[] b){
-    //     int totalLength = a.length + b.length;
-    //     byte[] result = new byte[totalLength];
-        
-    // }
-
-    public static Integer unmarshInt(byte[] data, boolean littleEndian, int offset){
+    public static Integer unmarshInt(byte[] data, BufferPointer bufPt){
+        int offset = bufPt.at;
         Integer result = 0;
-        if (littleEndian){
+        if (LITTLE_ENDIAN){
             result += (data[offset + 3] << 24) & 0xFF000000;
             result += (data[offset + 2] << 16) & 0x00FF0000;
             result += (data[offset + 1] << 8) & 0x0000FF00;
@@ -42,81 +47,105 @@ public class MarshUtil{
             result += (data[offset + 2] << 8) & 0x0000FF00;
             result += (data[offset + 3] << 0) & 0x000000FF;
         }
+        bufPt.at += 4;
         return result;
     }
 
-    public static byte[] marshShort(short data, boolean littleEndian) {    
-        byte[] result = new byte[2];
-        if (littleEndian){
-            result[1] = (byte) ((data & 0x0000FF00) >> 8);
-            result[0] = (byte) ((data & 0x000000FF) >> 0);
+    public static void marshShort(short data, byte[] out, BufferPointer bufPt) {    
+        int offset = bufPt.at;
+        if (LITTLE_ENDIAN){
+            out[offset+1] = (byte) ((data & 0x0000FF00) >> 8);
+            out[offset+0] = (byte) ((data & 0x000000FF) >> 0);
         } else {
-            result[0] = (byte) ((data & 0x0000FF00) >> 8);
-            result[1] = (byte) ((data & 0x000000FF) >> 0);
+            out[offset+0] = (byte) ((data & 0x0000FF00) >> 8);
+            out[offset+1] = (byte) ((data & 0x000000FF) >> 0);
         }
-        return result;
+        bufPt.at += 2;
     }
 
-    static short unmarshShort(byte[] data, boolean littleEndian, int offset){
+    public static short unmarshShort(byte[] data, BufferPointer bufPt){
+        int offset = bufPt.at;
         short result = 0;
-        if (littleEndian){
+        if (LITTLE_ENDIAN){
             result += (data[offset + 1] << 8) & 0x0000FF00;
             result += (data[offset + 0] << 0) & 0x000000FF;
         } else {
             result += (data[offset + 0] << 8) & 0x0000FF00;
             result += (data[offset + 1] << 0) & 0x000000FF;
         }
+        bufPt.at += 2;
         return result;
     }
 
-    static byte[] marshCType(CurrencyType data){
-        byte[] result = new byte[1];
-        result[0] = (byte) data.ordinal();
+    public static void marshCType(CurrencyType data, byte[] out, BufferPointer bufPt){
+        out[bufPt.at] = (byte) data.ordinal();
+        bufPt.at += 1;
+    }
+
+    public static CurrencyType unmarshCType(byte[] data, BufferPointer bufPt){
+        CurrencyType result = CurrencyType.values()[(int) data[bufPt.at]];
+        bufPt.at += 1;
         return result;
     }
 
-    public static CurrencyType unmarshCType(byte[] data, int offset){
-        return CurrencyType.values()[(int) data[offset]];
+    public static int getStringByteLen(String data){
+        // UTF-8 is variable length encoding so not 1 char = 1 byte
+        return data.getBytes(CHARSET).length;
     }
 
-    static byte[] marshString(String data, boolean littleEndian){
-        short strLen = (short) data.length();
-        byte[] result = new byte[2 + strLen];
-        byte[] strLenBytes = marshShort(strLen, littleEndian);
-        result[0] = strLenBytes[0];
-        result[1] = strLenBytes[1];
-        char[] charArr = data.toCharArray();
-        for (int i = 0; i < charArr.length; i++){
-            // what is the encoding?
+    public static int getStringByteLen(char[] data){
+        return getStringByteLen(new String(data));
+    }
+
+    public static void marshString(String data, byte[] out, BufferPointer bufPt){
+        var charBytes = data.getBytes(CHARSET);
+        short strLen = (short) charBytes.length;
+        marshShort(strLen, out, bufPt);
+        for (int i = 0; i < strLen; i++){
+            out[bufPt.at+i] = charBytes[i];
         }
+        bufPt.at += strLen;
+    }
+
+    public static String unmarshString(byte[] data, BufferPointer bufPt){
+        short strLen = unmarshShort(data, bufPt);
+        byte[] resultBytes = new byte[strLen];
+        for (int i = 0; i < strLen; i++){
+            resultBytes[i] = data[bufPt.at + i];
+        }
+        bufPt.at += strLen;
+        String result = new String(resultBytes, CHARSET);
         return result;
     }
 
-    public static String unmarshString(byte[] data, boolean littleEndian, int offset){
-        String result = "";
-        short strLen = unmarshShort(data, littleEndian, offset);
-        // encoding?
+    public static void marshCharArray(char[] data, byte[] out, BufferPointer bufPt){
+        String dataStr = new String(data);
+        byte[] result = dataStr.getBytes(CHARSET);
+        for (int i = 0; i < result.length; i++){
+            out[bufPt.at+i] = result[i];
+        }
+        bufPt.at += result.length;
+    }
+
+    public static char[] unmarshCharArray(byte[] data, int length, BufferPointer bufPt){
+        // note: assumption here is that one char = one byte (in utf-8, ascii characters use only 1 byte)
+        byte[] charData = new byte[length];
+        for (int i = 0; i < length; i++){
+            charData[i] = data[bufPt.at + i];
+        }
+        bufPt.at += length;
+        String charDataStr = new String(charData, CHARSET);
+        char[] result = charDataStr.toCharArray();
         return result;
     }
 
-    static byte[] marshCharArray(char[] data, int length){
-        byte[] result = new byte[length];
-        // encoding?
-        return result;
-    }
-
-    public static char[] unmarshCharArray(byte[] data, int length, int offset){
-        char[] result = new char[length];
-        return result;
-    }
-
-    public static byte[] marshFloat(float data, boolean littleEndian){
+    public static void marshFloat(float data, byte[] out, BufferPointer bufPt){
         int floatInt = Float.floatToRawIntBits(data);
-        return marshInt(floatInt, littleEndian);
+        marshInt(floatInt, out, bufPt);
     }
 
-    public static float unmarshFloat(byte[] data, boolean littleEndian, int offset){
-        int floatInt = unmarshInt(data, littleEndian, offset);
+    public static float unmarshFloat(byte[] data, BufferPointer bufPt){
+        int floatInt = unmarshInt(data, bufPt);
         return Float.intBitsToFloat(floatInt);
     }
 
@@ -124,7 +153,7 @@ public class MarshUtil{
         return Integer.toHexString(Byte.toUnsignedInt(b));
     }
 
-    private static String bytesToHex(byte[] bytes){
+    public static String bytesToHex(byte[] bytes){
         String result = "";
         for (int i = 0; i < bytes.length; i++){
             result += byteToHex(bytes[i]) + " ";
@@ -134,17 +163,24 @@ public class MarshUtil{
 
     private static void testInt(int x){
         System.out.println("original int: " + x);
-        
+        byte[] buf = new byte[4];
+        BufferPointer writeBufPt = new BufferPointer();
+        BufferPointer readBufPt = new BufferPointer();
+
         System.out.println("=== small endian ===");
-        byte[] marshelled = marshInt(x, true);
-        int unmarshelled = unmarshInt(marshelled, true, 0);
-        System.out.println("marshelled: " + bytesToHex(marshelled));
+        LITTLE_ENDIAN = true;
+        marshInt(x, buf, writeBufPt);
+        int unmarshelled = unmarshInt(buf, readBufPt);
+        System.out.println("marshelled: " + bytesToHex(buf));
         System.out.println("unmarshelled: " + unmarshelled);
 
         System.out.println("=== big endian ===");
-        marshelled = marshInt(x, false);
-        unmarshelled = unmarshInt(marshelled, false, 0);
-        System.out.println("marshelled: " + bytesToHex(marshelled));
+        LITTLE_ENDIAN = false;
+        writeBufPt.at = 0;
+        readBufPt.at = 0;
+        marshInt(x, buf, writeBufPt);
+        unmarshelled = unmarshInt(buf, readBufPt);
+        System.out.println("marshelled: " + bytesToHex(buf));
         System.out.println("unmarshelled: " + unmarshelled);
 
         System.out.println();
@@ -152,17 +188,24 @@ public class MarshUtil{
 
     private static void testShort(short x){
         System.out.println("original short: " + x);
-        
+        byte[] buf = new byte[2];
+        BufferPointer writeBufPt = new BufferPointer();
+        BufferPointer readBufPt = new BufferPointer();
+
         System.out.println("=== small endian ===");
-        byte[] marshelled = marshShort(x, true);
-        short unmarshelled = unmarshShort(marshelled, true, 0);
-        System.out.println("marshelled: " + bytesToHex(marshelled));
+        LITTLE_ENDIAN = true;
+        marshShort(x, buf, writeBufPt);
+        short unmarshelled = unmarshShort(buf, readBufPt);
+        System.out.println("marshelled: " + bytesToHex(buf));
         System.out.println("unmarshelled: " + unmarshelled);
 
         System.out.println("=== big endian ===");
-        marshelled = marshShort(x, false);
-        unmarshelled = unmarshShort(marshelled, false, 0);
-        System.out.println("marshelled: " + bytesToHex(marshelled));
+        LITTLE_ENDIAN = false;
+        writeBufPt.at = 0;
+        readBufPt.at = 0;
+        marshShort(x, buf, writeBufPt);
+        unmarshelled = unmarshShort(buf, readBufPt);
+        System.out.println("marshelled: " + bytesToHex(buf));
         System.out.println("unmarshelled: " + unmarshelled);
      
         System.out.println();
@@ -170,37 +213,65 @@ public class MarshUtil{
 
     private static void testFloat(float x){
         System.out.println("original float: " + x);
-        
+        byte[] buf = new byte[4];
+        BufferPointer writeBufPt = new BufferPointer();
+        BufferPointer readBufPt = new BufferPointer();
+
         System.out.println("=== small endian ===");
-        byte[] marshelled = marshFloat(x, true);
-        float unmarshelled = unmarshFloat(marshelled, true, 0);
-        System.out.println("marshelled: " + bytesToHex(marshelled));
+        LITTLE_ENDIAN = true;
+        marshFloat(x, buf, writeBufPt);
+        float unmarshelled = unmarshFloat(buf, readBufPt);
+        System.out.println("marshelled: " + bytesToHex(buf));
         System.out.println("unmarshelled: " + unmarshelled);
 
         System.out.println("=== big endian ===");
-        marshelled = marshFloat(x, false);
-        unmarshelled = unmarshFloat(marshelled, false, 0);
-        System.out.println("marshelled: " + bytesToHex(marshelled));
+        LITTLE_ENDIAN = false;
+        marshFloat(x, buf, writeBufPt);
+        unmarshelled = unmarshFloat(buf, readBufPt);
+        System.out.println("marshelled: " + bytesToHex(buf));
         System.out.println("unmarshelled: " + unmarshelled);
 
         System.out.println();
     }
 
     private static void testString(String x){
+        System.out.println("original String: " + x);
+        byte[] buf = new byte[2 + getStringByteLen(x)];
+        BufferPointer writeBufPt = new BufferPointer();
+        BufferPointer readBufPt = new BufferPointer();
+        
+        marshString(x, buf, writeBufPt);
+        String unmarshelled = unmarshString(buf, readBufPt);
+        System.out.println("marshelled: " + bytesToHex(buf));
+        System.out.println("unmarshelled: " + unmarshelled);
 
+        System.out.println();
     }
 
     private static void testCharArray(char[] x){
+        System.out.println("original char array: " + new String(x));
+        byte[] buf = new byte[2 + getStringByteLen(x)];
+        BufferPointer writeBufPt = new BufferPointer();
+        BufferPointer readBufPt = new BufferPointer();
+        
+        marshCharArray(x, buf, writeBufPt);
+        char[] unmarshelled = unmarshCharArray(buf, x.length, readBufPt);
+        System.out.println("marshelled: " + bytesToHex(buf));
+        System.out.println("unmarshelled: " + new String(unmarshelled));
 
+        System.out.println();
     }
 
     private static void testCurrencyType(CurrencyType x){
         System.out.println("original currencyType: " + x);
+        byte[] buf = new byte[1];
+        BufferPointer writeBufPt = new BufferPointer();
+        BufferPointer readBufPt = new BufferPointer();
         
-        byte[] marshelled = marshCType(x);
-        CurrencyType unmarshelled = unmarshCType(marshelled, 0);
-        System.out.println("marshelled: " + bytesToHex(marshelled));
-        System.out.println("unmarshelled: " + unmarshelled);
+        marshCType(x, buf, writeBufPt);
+        CurrencyType unmarshelled = unmarshCType(buf, readBufPt);
+        System.out.println("marshelled: " + bytesToHex(buf));
+        System.out.println("unmarshelled: " + unmarshelled.toString());
 
         System.out.println();
     }
@@ -210,5 +281,7 @@ public class MarshUtil{
         testShort((short)10448);
         testFloat((float)0.12345);
         testCurrencyType(CurrencyType.SGD);
+        testString("Hello world panda!");
+        testCharArray("Hello world bamboo!".toCharArray());
     }
 }

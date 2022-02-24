@@ -2,14 +2,14 @@ package BigPackage;
 
 
 public class Request {
-    int requestType;
+    short requestType;
     String senderIP;
-    int portNumber;
+    short portNumber;
     byte[] requestData;
 
-    Request(int requestType, byte[] requestData){
+    Request(short requestType, byte[] requestData){
         this.requestType = requestType;
         this.requestData = requestData;
     }
-
+    // feels like don't really need this. might delete later.
 }

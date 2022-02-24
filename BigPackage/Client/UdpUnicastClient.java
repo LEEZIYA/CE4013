@@ -5,6 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 
+import BigPackage.BufferPointer;
 import BigPackage.MarshUtil;
 
 /**
@@ -32,6 +33,7 @@ public class UdpUnicastClient implements Runnable {
              */
 
             byte[] buffer = new byte[65507];
+            BufferPointer bufPt = new BufferPointer();
 
             // Set a timeout of 3000 ms for the client.
             clientSocket.setSoTimeout(3000);
@@ -45,7 +47,7 @@ public class UdpUnicastClient implements Runnable {
                 clientSocket.receive(datagramPacket);
 
                 byte[] receivedMessage = datagramPacket.getData();
-                int unmarshalledInt = MarshUtil.unmarshInt(receivedMessage, true, 0);
+                int unmarshalledInt = MarshUtil.unmarshInt(receivedMessage, bufPt);
                 System.out.println(100 + unmarshalledInt);
             }
         } catch (SocketException e) {
