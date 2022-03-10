@@ -31,10 +31,10 @@ public class Server2{
 	private void service() throws IOException {
         while (true) {
 
-            System.out.println("BANK!");
+            System.out.println("Awaiting user input.");
             DatagramPacket request = new DatagramPacket(new byte[1], 1);
             socket.receive(request);
-            System.out.println("GOTTEM");
+            System.out.println("Request received.");
  
             String quote = getRandomQuote();
             byte[] buffer = quote.getBytes();
@@ -44,11 +44,12 @@ public class Server2{
  
             DatagramPacket response = new DatagramPacket(buffer, buffer.length, clientAddress, clientPort);
             socket.send(response);
+            System.out.println("Answer sent. \n");
         }
     }
 
 	private String getRandomQuote(){
-		String SSS = "Return application logic response.";
+		String SSS = "Here you go! This is a reply from the bank.";
 		return SSS;
 	}
 }
