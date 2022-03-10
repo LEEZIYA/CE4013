@@ -1,8 +1,13 @@
 package BigPackage.Server;
 import java.io.*;
 import java.net.*;
+import java.math.*;
+
+import javax.lang.model.util.ElementScanner14;
 
 public class Server2{
+
+double thres = 0.7;
 
 	private DatagramSocket socket;
  
@@ -34,17 +39,40 @@ public class Server2{
             System.out.println("Awaiting user input.");
 
             byte[] buffermax = new byte[512];
-
             DatagramPacket request = new DatagramPacket(buffermax, buffermax.length);
-            socket.receive(request);
+
+            while(true)
+            {
+                socket.receive(request);
+                if(Math.random()<thres)
+                    break;
+            }
+
             System.out.println("Request received.");
 
             String reqdata = new String(buffermax, 0, request.getLength());
 
             System.out.println("Request: "+reqdata);
- 
-            String quote = getRandomQuote();
-            byte[] buffer = quote.getBytes();
+
+            byte[] buffer;
+
+            if(reqdata.equals("New Account"))
+            {
+                String quote = "Your new account is ready!";buffer = quote.getBytes();
+            }
+            else if(reqdata.equals("Deposit"))
+            {
+                String quote = "Your deposit was successful!";buffer = quote.getBytes();
+            }
+            else if(reqdata.equals("Closing"))
+            {
+                String quote = "Thanks for banking with us Mr. Loyal Customer. Bye bye!";buffer = quote.getBytes();
+            }
+            else{
+                String quote = "Re try maybe with another input.";buffer = quote.getBytes();
+            }
+
+
  
             InetAddress clientAddress = request.getAddress();
             int clientPort = request.getPort();
@@ -55,10 +83,6 @@ public class Server2{
         }
     }
 
-	private String getRandomQuote(){
-		String SSS = "Here you go! This is a reply from the bank.";
-		return SSS;
-	}
 }
 
 

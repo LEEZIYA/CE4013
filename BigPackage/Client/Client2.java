@@ -2,9 +2,10 @@ package BigPackage.Client;
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
+import java.math.*;
 
 public class Client2{
-    
+
     private DatagramSocket socket;
  
     public Client2(int port) throws SocketException {
@@ -21,6 +22,8 @@ public class Client2{
 
     Scanner sc = new Scanner(System.in);
 
+    double thres = 0.7;
+
     try{
         InetAddress address = InetAddress.getByName(hostname);
         DatagramSocket socket = new DatagramSocket();
@@ -31,7 +34,7 @@ public class Client2{
 
         while(x!=0){
 
-            System.out.println("Enter your request Mr. Customer: ");
+            System.out.println("Enter your request Mr. Customer: You can try \"New Account\" or \"Closing\" or \"Deposit\"");
             String ssd = sc.nextLine();
             byte buffermax[] = ssd.getBytes();
 
@@ -42,7 +45,13 @@ public class Client2{
 
             byte[] buffer = new byte[512];
             DatagramPacket response = new DatagramPacket(buffer, buffer.length);
-            socket.receive(response);
+
+            while(true)
+            {
+                socket.receive(response);
+                if(Math.random()<thres)
+                    break;
+            }
 
             System.out.println("Answer received: \n");
 
