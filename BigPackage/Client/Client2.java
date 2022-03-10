@@ -25,22 +25,26 @@ public class Client2{
         InetAddress address = InetAddress.getByName(hostname);
         DatagramSocket socket = new DatagramSocket();
 
-        System.out.println("Sent!");
+        System.out.println("Connection protocol initialized.");
 
         int x = 1;
 
         while(x!=0){
 
-            DatagramPacket request = new DatagramPacket(new byte[1],1,address,port);
+            System.out.println("Enter your request Mr. Customer: ");
+            String ssd = sc.nextLine();
+            byte buffermax[] = ssd.getBytes();
+
+            DatagramPacket request = new DatagramPacket(buffermax,buffermax.length,address,port);
             socket.send(request);
 
-            System.out.println("Sent!");
+            System.out.println("Request sent.");
 
             byte[] buffer = new byte[512];
             DatagramPacket response = new DatagramPacket(buffer, buffer.length);
             socket.receive(response);
 
-            System.out.println("Recd!");
+            System.out.println("Answer received: \n");
 
             String quote = new String(buffer, 0, response.getLength());
 
@@ -49,7 +53,7 @@ public class Client2{
 
             Thread.sleep(100);
 
-            System.out.println("Press NO to stop else go on.");
+            System.out.println("Enter \"NO\" to stop communication else continue with any other input for the next prompt:");
             if(sc.nextLine().equals("NO"))
                 x = 0;
 
