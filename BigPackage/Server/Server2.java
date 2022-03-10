@@ -32,9 +32,16 @@ public class Server2{
         while (true) {
 
             System.out.println("Awaiting user input.");
-            DatagramPacket request = new DatagramPacket(new byte[1], 1);
+
+            byte[] buffermax = new byte[512];
+
+            DatagramPacket request = new DatagramPacket(buffermax, buffermax.length);
             socket.receive(request);
             System.out.println("Request received.");
+
+            String reqdata = new String(buffermax, 0, request.getLength());
+
+            System.out.println("Request: "+reqdata);
  
             String quote = getRandomQuote();
             byte[] buffer = quote.getBytes();

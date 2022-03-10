@@ -31,7 +31,11 @@ public class Client2{
 
         while(x!=0){
 
-            DatagramPacket request = new DatagramPacket(new byte[1],1,address,port);
+            System.out.println("Enter your request Mr. Customer: ");
+            String ssd = sc.nextLine();
+            byte buffermax[] = ssd.getBytes();
+
+            DatagramPacket request = new DatagramPacket(buffermax,buffermax.length,address,port);
             socket.send(request);
 
             System.out.println("Request sent.");
@@ -49,7 +53,7 @@ public class Client2{
 
             Thread.sleep(100);
 
-            System.out.println("Enter \"NO\" to stop communication else continue with input:");
+            System.out.println("Enter \"NO\" to stop communication else continue with any other input for the next prompt:");
             if(sc.nextLine().equals("NO"))
                 x = 0;
 
