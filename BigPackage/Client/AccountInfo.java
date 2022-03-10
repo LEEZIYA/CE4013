@@ -8,6 +8,8 @@ public class AccountInfo {
 	private char[] password; 
 	private CurrencyType cType; 
 	private float initialBalance;
+	private float currentBalance;
+
 	public String getName() {
 		return name;
 	}
@@ -38,13 +40,23 @@ public class AccountInfo {
 	public void setInitialBalance(float initialBalance) {
 		this.initialBalance = initialBalance;
 	}
-	
+	public float getCurrentBalance() {
+		return currentBalance;
+	}
+	public void setCurrentBalance(float currentBalance) {
+		this.currentBalance = currentBalance;
+	}	
 	public AccountInfo() {
 		initialBalance = 0;
 	}
 	
-
-	
-	
+	public AccountInfo(String name, char[] password, CurrencyType cType, float initialBalance, int accountNum){
+		this.name = name;
+		this.password = password;
+		this.cType = cType;
+		this.initialBalance = initialBalance;
+		this.currentBalance = initialBalance;
+		// this.accountNum = accountNum;	// number of string?
+	}
 	
 }
