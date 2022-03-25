@@ -1,8 +1,5 @@
 package BigPackage.Server;
 
-import BigPackage.BufferPointer;
-import BigPackage.CurrencyType;
-import BigPackage.MarshUtil;
 
 public class ServerController {
 
@@ -39,10 +36,10 @@ public class ServerController {
             String ipAddr = "192.168.1.1";
             short portNum = 80;
             
-            // reset buffer pointers for each message received
+            // reset the buffer pointers
             service.acceptNewRequest(requestBuf);
-            int requestType = service.decodeRequestType();
             try{
+                int requestType = service.decodeRequestType();
                 switch (requestType){
                     case 0:
                         service.openAccount();
@@ -54,16 +51,28 @@ public class ServerController {
                         service.changeBalance();
                         break;
                     case 3:
-                        service.subscribeForUpdate(ipAddr, portNum);
+                        // ask socket layer to add client to broadcast list
+                        break;
+                    case 4:
+                        service.getAccountBalance();
+                        break;
+                    case 5:
+                        service.transferFund();
+                        break;
                     default:
                         System.out.println("Unknown request type of " + requestType);
                 }
-                System.out.println("Response hex: " + service.getResponseInHex());
-            } catch (Exception e) {
+            } catch (RequestException e) {
+                System.out.println("RequestException occurred when handling request from " + ipAddr + ": " + portNum + ". "+ e);
+                service.addFailureResponse(e.getMessage());
+            } catch (Exception e){
                 System.out.println("Exception occurred when handling request from " + ipAddr + ": " + portNum + ". "+ e);
+                service.addFailureResponse("Server error");
             }
 
             // send response back
+            byte[] repsonse = service.getResponse();
+            int responseLength = service.getResponseLength();
 
             Thread.sleep(100);
         }

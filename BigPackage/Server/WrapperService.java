@@ -1,7 +1,5 @@
 package BigPackage.Server;
 
-import java.util.ArrayList;
-
 import BigPackage.BufferPointer;
 import BigPackage.CurrencyType;
 import BigPackage.MarshUtil;
@@ -30,7 +28,15 @@ public class WrapperService {
         return MarshUtil.unmarshShort(requestData, readBufPt);
     }
 
-    public void addSuccessResponseCode(){
+    public void addFailureResponse(String errorMessage){
+        int dataByteCount = MarshUtil.getStringByteLen(errorMessage);
+        responseBuf = new byte[2 + dataByteCount];
+
+        MarshUtil.marshShort((short)0, responseBuf, writeBufPt);
+        MarshUtil.marshString(errorMessage, responseBuf, writeBufPt);
+    }
+
+    private void addSuccessResponseCode(){
         MarshUtil.marshShort((short)1, responseBuf, writeBufPt);
     }
 
@@ -42,48 +48,68 @@ public class WrapperService {
         String name = MarshUtil.unmarshString(requestData, readBufPt);
 
         int returnValue = coreService.openAccount(name, password, cType, initialBalance);
-        MarshUtil.marshShort((short)1, responseBuf, writeBufPt);
+        addSuccessResponseCode();
         MarshUtil.marshInt(returnValue, responseBuf, writeBufPt);
 
-        ArrayList<SubscribedClient> subscribedClients = coreService.getClientsToNotify();
-        // notify
+        // send broadcastUpdate
     }
 
-    public void closeAccount() {
+    public void closeAccount() throws RequestException {
         responseBuf = new byte[2 + 2];
         CurrencyType cType = MarshUtil.unmarshCType(requestData, readBufPt);
+        int accountNum = MarshUtil.unmarshInt(requestData, readBufPt);
         char[] password = MarshUtil.unmarshCharArray(requestData, 8, readBufPt);
         String name = MarshUtil.unmarshString(requestData, readBufPt);
 
-        boolean returnValue = coreService.closeAccount(name, password, cType);
-        if (returnValue){
-            MarshUtil.marshShort((short)1, responseBuf, writeBufPt);
-        } else {
-            MarshUtil.marshShort((short)0, responseBuf, writeBufPt);
-        }
+        coreService.closeAccount(accountNum, name, password, cType);
+        addSuccessResponseCode();
 
-        ArrayList<SubscribedClient> subscribedClients = coreService.getClientsToNotify();
-        // notify
+        // send broadcastUpdate
     }
-
-    public void changeBalance() {
+ 
+    public void changeBalance() throws RequestException{
         responseBuf = new byte[2 + 4];
         CurrencyType cType = MarshUtil.unmarshCType(requestData, readBufPt);
         float change = MarshUtil.unmarshFloat(requestData, readBufPt);
+        int accountNum = MarshUtil.unmarshInt(requestData, readBufPt);
         char[] password = MarshUtil.unmarshCharArray(requestData, 8, readBufPt);
         String name = MarshUtil.unmarshString(requestData, readBufPt);
 
-        float returnValue = coreService.changeBalance(name, password, cType, change);
+        float returnValue = coreService.changeBalance(accountNum, name, password, cType, change);
+        addSuccessResponseCode();
         MarshUtil.marshFloat(returnValue, responseBuf, writeBufPt);
 
-        ArrayList<SubscribedClient> subscribedClients = coreService.getClientsToNotify();
-        // notify
+        // send broadcastUpdate
     }
 
-    public void subscribeForUpdate(String ipAddr, short portNum) {
-        responseBuf = new byte[2];
-        float monitorInterval = MarshUtil.unmarshFloat(requestData, readBufPt);
-        coreService.subscribeForUpdate(ipAddr, portNum, monitorInterval);
+    public void getAccountBalance() throws RequestException{
+        responseBuf = new byte[2 + 4];
+        CurrencyType cType = MarshUtil.unmarshCType(requestData, readBufPt);
+        int accountNum = MarshUtil.unmarshInt(requestData, readBufPt);
+        char[] password = MarshUtil.unmarshCharArray(requestData, 8, readBufPt);
+        String name = MarshUtil.unmarshString(requestData, readBufPt);
+
+        float returnValue = coreService.getAccountBalance(accountNum, name, password, cType);
+        addSuccessResponseCode();
+        MarshUtil.marshFloat(returnValue, responseBuf, writeBufPt);
+
+        // send broadcastUpdate
+    }
+
+    public void transferFund() throws RequestException{
+        responseBuf = new byte[2 + 4];
+        CurrencyType cType = MarshUtil.unmarshCType(requestData, readBufPt);
+        float amount = MarshUtil.unmarshFloat(requestData, readBufPt);
+        int destAccountNum = MarshUtil.unmarshInt(requestData, readBufPt);
+        int accountNum = MarshUtil.unmarshInt(requestData, readBufPt);
+        char[] password = MarshUtil.unmarshCharArray(requestData, 8, readBufPt);
+        String name = MarshUtil.unmarshString(requestData, readBufPt);
+
+        float returnValue = coreService.transferFund(accountNum, name, password, cType, destAccountNum, amount);
+        addSuccessResponseCode();
+        MarshUtil.marshFloat(returnValue, responseBuf, writeBufPt);
+
+        // send broadcastUpdate
     }
 
     public byte[] getResponse(){
@@ -92,6 +118,10 @@ public class WrapperService {
 
     public String getResponseInHex(){
         return MarshUtil.bytesToHex(responseBuf);
+    }
+
+    public int getResponseLength(){
+        return writeBufPt.at;
     }
 
 }

@@ -4,7 +4,7 @@ import BigPackage.CurrencyType;
 
 public class AccountInfo {
 	private String name;
-	private String accountNum;
+	private int accountNum;
 	private char[] password; 
 	private CurrencyType cType; 
 	private float initialBalance;
@@ -16,10 +16,10 @@ public class AccountInfo {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getAccountNum() {
+	public int getAccountNum() {
 		return accountNum;
 	}
-	public void setAccountNum(String accountNum) {
+	public void setAccountNum(int accountNum) {
 		this.accountNum = accountNum;
 	}
 	public char[] getPassword() {
@@ -56,7 +56,7 @@ public class AccountInfo {
 		this.cType = cType;
 		this.initialBalance = initialBalance;
 		this.currentBalance = initialBalance;
-		// this.accountNum = accountNum;	// number of string?
+		this.accountNum = accountNum;
 	}
 	
 }

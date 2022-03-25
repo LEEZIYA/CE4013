@@ -9,7 +9,7 @@ public class ClientService {
 		//placeholder
 		response.setMessage("Account created successfully");
 		AccountInfo account = new AccountInfo();
-		account.setAccountNum("00107654");
+		account.setAccountNum(1234);
 		response.setSuccess(true);
 		response.setAccountInfo(account);
 		//placeholder
