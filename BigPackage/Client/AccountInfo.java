@@ -57,8 +57,8 @@ public class AccountInfo {
 	public int getDestAccount() {
 		return accountNum;
 	}
-	public void setDestAccoun(Integer accountNum) {
-		this.accountNum = accountNum;
+	public void setDestAccount(Integer accountNum) {
+		this.destAccount = accountNum;
 	}
 	
 	public AccountInfo() {

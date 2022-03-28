@@ -11,7 +11,7 @@ public class ClientService {
 
 	public Response openAccount(AccountInfo accountInfo) {
 		//marshalling
-		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+MarshUtil.getStringByteLen(accountInfo.getPassword)+MarshUtil.getStringByteLen(accountinfo.getName()));
+		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountinfo.getName()));
 		messageBuffer.marshShort((short)0); //requestType
 		messageBuffer.marshCType(accountInfo.getcType());
 		messageBuffer.marshFloat(accountInfo.getInitialBalance());
@@ -22,6 +22,7 @@ public class ClientService {
 		
 		byte[] reply = udpCLient.send(message); //Byte reply is where the reply from the server. This placehodler includes waiting.
 		//blocking wait for reponse?
+		
 		Response response = new Response(); 
 
 		MarshBuffer replyBuffer = new MarshBuffer(reply);
@@ -43,7 +44,7 @@ public class ClientService {
 	}
 	public Response closeAccount(AccountInfo accountInfo) {
 		//marshalling
-		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+MarshUtil.getStringByteLen(accountInfo.getPassword)+MarshUtil.getStringByteLen(accountinfo.getName()));
+		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountinfo.getName()));
 		messageBuffer.marshShort((short)1); //requestType
 		messageBuffer.marshCType(accountInfo.getcType());
 		messageBuffer.marshInt(accountInfo.getAccountNum());
@@ -70,7 +71,7 @@ public class ClientService {
 
 	public Response withdrawMoney(AccountInfo accountInfo) {
 		//marshalling
-		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+4+MarshUtil.getStringByteLen(accountInfo.getPassword)+MarshUtil.getStringByteLen(accountinfo.getName()));
+		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountinfo.getName()));
 		messageBuffer.marshShort((short)2); //requestType
 
 		messageBuffer.marshCType(accountInfo.getcType());
@@ -106,7 +107,7 @@ public class ClientService {
 
 	public Response depositMoney(AccountInfo accountInfo) {
 		//marshalling
-		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+4+MarshUtil.getStringByteLen(accountInfo.getPassword)+MarshUtil.getStringByteLen(accountinfo.getName()));
+		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountinfo.getName()));
 		messageBuffer.marshShort((short)2); //requestType
 
 		messageBuffer.marshCType(accountInfo.getcType());
@@ -139,5 +140,123 @@ public class ClientService {
 		return response;
 		
 	}
+
+
+	//unblocking send
+	public void subscribeForUpdate(int monitorInterval){
+		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountinfo.getName()));
+		messageBuffer.marshShort((short)3); //requestType
+
+		messageBuffer.marshInt(monitorInterval);
+
+		byte[] message = messageBuffer.toByte();
+		
+		byte[] reply = udpCLient.unblocking_send(message);
+		//need an unblocking version of send
+		return;
+	}
+
+	//blocking wait for message from server
+	public Response getUpdate() {
+		//marshalling
+		MarshBuffer messageBuffer = new MarshBuffer(2+4);
+		messageBuffer.marshShort((short)3); //requestType
+
+		messageBuffer.marshInt(monitorInterval);
+
+		byte[] message = messageBuffer.toByte();
+		
+		byte[] reply = udpCLient.listen();
+		//blocking wait for response
+		Response response = new Response(); 
+
+		MarshBuffer replyBuffer = new MarshBuffer(reply);
+		
+        boolean success = this.getSuccessStatus(replyBuffer);
+		response.setSuccess(success);
+		
+		if(success){
+			response.setMessage(replyBuffer.unmarshString());
+		}			
+		return response;
+		
+	}
+
+
+
+	public Response getAccountBalance(AccountInfo accountInfo) {
+		//marshalling
+		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountinfo.getName()));
+		messageBuffer.marshShort((short)2); //requestType
+
+		messageBuffer.marshCType(accountInfo.getcType());
+		messageBuffer.marshInt(accountInfo.getAccountNum());
+		messageBuffer.marshCharArray(accountInfo.getPassword());
+		messageBuffer.marshString(accountInfo.getName());
+
+		byte[] message = messageBuffer.toByte();
+		
+		byte[] reply = udpCLient.send(message);
+		//blocking wait for reponse?
+		Response response = new Response(); 
+
+		MarshBuffer replyBuffer = new MarshBuffer(reply);
+		
+        boolean success = this.getSuccessStatus(replyBuffer);
+		response.setSuccess(success);
+		
+		if(success){
+			// response.setMessage("Account created successfully");
+			Float currentBalance = replyBuffer.unmarshFloat();
+			AccountInfo account = new AccountInfo();
+			account.setCurrentBalance(currentBalance);
+			response.setAccountInfo(account);
+		}
+		else{
+			response.setMessage(replyBuffer.unmarshString());
+		}			
+		return response;
+		
+	}
+
+	public Response transferFund(AccountInfo accountInfo) {
+		//marshalling
+		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+4+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountinfo.getName()));
+		messageBuffer.marshShort((short)2); //requestType
+
+		messageBuffer.marshCType(accountInfo.getcType());
+		messageBUffer.marshFloat(accountInfo.getChange());
+		messageBuffer.marshInt(accountInfo.getDestAccount());
+		messageBuffer.marshInt(accountInfo.getAccountNum());
+		messageBuffer.marshCharArray(accountInfo.getPassword());
+		messageBuffer.marshString(accountInfo.getName());
+
+		byte[] message = messageBuffer.toByte();
+		
+		byte[] reply = udpCLient.send(message);
+		//blocking wait for reponse?
+		Response response = new Response(); 
+
+		MarshBuffer replyBuffer = new MarshBuffer(reply);
+		
+        boolean success = this.getSuccessStatus(replyBuffer);
+		response.setSuccess(success);
+		
+		if(success){
+			// response.setMessage("Account created successfully");
+			Float currentBalance = replyBuffer.unmarshFloat();
+			AccountInfo account = new AccountInfo();
+			account.setCurrentBalance(currentBalance);
+			response.setAccountInfo(account);
+		}
+		else{
+			response.setMessage(replyBuffer.unmarshString());
+		}			
+		return response;
+		
+	}
+
+
+
 
 }

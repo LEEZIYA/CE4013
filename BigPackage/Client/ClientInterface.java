@@ -160,7 +160,7 @@ public class ClientInterface {
 		boolean success = response.isSuccess();
 		if(success) {
 			System.out.println("Money withdrawed successfully!");
-			System.out.println("Current balance is "+accountInfo.getCurrentBalance);
+			System.out.println("Current balance is "+accountInfo.getCurrentBalance());
 		}
 		else {
 			System.out.println("Money withdrawl failed!");
@@ -184,7 +184,7 @@ public class ClientInterface {
 		boolean success = response.isSuccess();
 		if(success) {
 			System.out.println("Money withdrawed successfully!");
-			System.out.println("Current balance is "+accountInfo.getCurrentBalance);
+			System.out.println("Current balance is "+accountInfo.getCurrentBalance());
 		}
 		else {
 			System.out.println("Money withdrawl failed!");
@@ -226,7 +226,7 @@ public class ClientInterface {
 		boolean success = response.isSuccess();
 		if(success) {
 			System.out.println("Balance checking successfully!");
-			System.out.println("Current balance is "+accountInfo.getCurrentBalance);
+			System.out.println("Current balance is "+accountInfo.getCurrentBalance());
 		}
 		else {
 			System.out.println("Balance checking failed!");
@@ -253,8 +253,8 @@ public class ClientInterface {
 	public void fundTransferResult(Response response){
 		boolean success = response.isSuccess();
 		if(success) {
-			System.out.println("Balance checking successfully!");
-			System.out.println("Current balance is "+accountInfo.getCurrentBalance);
+			System.out.println("Fund transfer successfully!");
+			System.out.println("Current balance is "+accountInfo.getCurrentBalance());
 		}
 		else {
 			System.out.println("Balance checking failed!");

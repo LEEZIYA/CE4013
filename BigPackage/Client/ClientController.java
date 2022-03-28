@@ -78,7 +78,7 @@ public class ClientController {
 		int monitorInterval;
 		monitorInterval = this.clientUI.monitorUpdate();
 		this.clientService.subscribeForUpdate(monitorInterval);
-
+		//need to make this non-blocking?
 		while(true){
 			//blocking wait for update
 			Response response = this.clentService.getUpdate(withdrawAccount);
@@ -103,8 +103,8 @@ public class ClientController {
 	}
 
 	public void transferFund(){
-		AccountInfo requestedAccount = this.clientUI.transferFund();
-		Response response = this.clientService.transferFund(requestedAccount);
+		AccountInfo accountInfo = this.clientUI.transferFund();
+		Response response = this.clientService.transferFund(accountInfo);
 		this.clientUI.fundTransferResult(response);
 		return;
 	}
