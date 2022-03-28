@@ -222,7 +222,7 @@ public class ClientInterface {
 		return accountinfo;
 	}
 
-	public accountBalanceResult(Response response){
+	public void accountBalanceResult(Response response){
 		boolean success = response.isSuccess();
 		if(success) {
 			System.out.println("Balance checking successfully!");
@@ -235,10 +235,32 @@ public class ClientInterface {
 	}
 
 	//7. transfer fund
-	public transferFund(){
+	public AccountInfo transferFund(){
+		Scanner sc = new Scanner(System.in);
+		System.out.prinln("Welcome to fund transfer");
+		AccountInfo accountinfo = new AccountInfo();
+		this.verifyPassword(accountInfo);
+		System.out.println("Please enter your destination account number");
+		int destAccount = sc.nextInt();
+		AccountInfo.setDestAccount(destAccount);
+		System.out.println("Please enter your transfer amount");
+		float amount = sc.nextFloat();
+		accountInfo.setChange(amount);
 
+		return accountInfo;
 	}
 
+	public void fundTransferResult(Response response){
+		boolean success = response.isSuccess();
+		if(success) {
+			System.out.println("Balance checking successfully!");
+			System.out.println("Current balance is "+accountInfo.getCurrentBalance);
+		}
+		else {
+			System.out.println("Balance checking failed!");
+			System.out.println("Error: "+response.getMessage());
+		}
+	}
 
 	
 	
