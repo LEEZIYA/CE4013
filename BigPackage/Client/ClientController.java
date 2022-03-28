@@ -22,22 +22,22 @@ public class ClientController {
 					this.createAccount();
 					break;
 				case 2: //close account
-					
+					this.closeAccount();
 					break;
-				case 3: //deposit money
-					
+				case 3: //withdraw money
+					this.withdrawMoney();
 					break;
-				case 4: //withdraw money
-					
+				case 4: //deposit money
+					this.depositMoney();
 					break;
 				case 5://monitor update at server
-					
+					this.monitorUpdate();
 					break;
 				case 6://get account info
-					
+					this.getAccountBalance();
 					break;
 				case 7://transfer funds
-					
+					this.transferFund();
 					break;
 				case -1 :
 					keepRunning = false;
@@ -56,7 +56,58 @@ public class ClientController {
 		this.clientUI.accountCreationResult(response);
 		return;
 	}
-	public void verifyPassword(AccountInfo accountInfo) {
-		
+	public void closeAccount(){
+		AccountInfo closedAccount = this.clientUI.closeAccount();
+		Response response = this.clentService.closeAccount(closeAccount);
+		this.clientUI.accountClosingResult(response);
+		return;
 	}
+	public void depositMoney(){
+		AccountInfo depositAccount = this.clientUI.depositMoney();
+		Response response = this.clentService.depositMoney(depositAccount);
+		this.clientUI.moneyDepositResult(response);
+		return;
+	}
+	public void withdrawMoney(){
+		AccountInfo withdrawAccount = this.clientUI.withdrawMoney();
+		Response response = this.clentService.withdrawMoney(withdrawAccount);
+		this.clientUI.moneyDepositResult(response);
+		return;
+	}
+	public void monitorUpdate(){
+		int monitorInterval;
+		monitorInterval = this.clientUI.monitorUpdate();
+		this.clientService.subscribeForUpdate(monitorInterval);
+
+		while(true){
+			//blocking wait for update
+			Response response = this.clentService.getUpdate(withdrawAccount);
+			
+			if(!response.isSuccess){ // check whether interval is finished
+				break; //informed by server that monitor interval over, stop monitoring
+			}
+			else{
+				this.clientUI.monitoringResult(response); //print out response
+			}
+			//else continue looping and monitoring
+		}
+		return;
+
+	}
+
+	public void getAccountBalance(){
+		AccountInfo requestedAccount = this.clientUI.getAccountBalance();
+		Response response = this.clientService.getAccountBalance(requestedAccount);
+		this.clientUI.accountBalanceResult(response);
+		return;
+	}
+
+	public void transferFund(){
+		AccountInfo requestedAccount = this.clientUI.transferFund();
+		Response response = this.clientService.transferFund(requestedAccount);
+		this.clientUI.fundTransferResult(response);
+		return;
+	}
+
+
 }

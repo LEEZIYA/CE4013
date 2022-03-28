@@ -13,8 +13,8 @@ public class ClientInterface {
 		System.out.println("3.Deposit Money");
 		System.out.println("4.Withdraw Money");
 		System.out.println("5.Monitor Update at Server");
-		System.out.println("6.Custom Operation I");
-		System.out.println("7.Custom Operation II");
+		System.out.println("6.Check Account Balance");
+		System.out.println("7.Transfer Funds");
 		System.out.println("8.Exit programme");
 		
 		System.out.println("Please input an integer range 1 to 7");
@@ -38,10 +38,22 @@ public class ClientInterface {
 		
 
 	}
-//	private int verifyPassword() {
-//		System.out.println("Please enter your Account Number");
-//		
-//	}
+	private void verifyPassword(AccountInfo accountInfo) {
+		Scanner sc = new Scanner(System.in);
+
+		System.out.println("Please Enter Your Username:");
+		String name = sc.nextLine();
+		System.out.println("Please Enter Your Account Number:");
+		int accountNum = sc.nextInt();
+		System.out.println("Please Enter Your Password");
+		char[] password = sc.nextLine().toCharArray();
+
+		accountInfo.setName(name);
+		accountInfo.setAccountNum(accountNum);
+		accountInfo.setPassword(password);
+		return;
+		
+	}
 	//1. create account
 	public AccountInfo createAccount() {
 		
@@ -93,8 +105,7 @@ public class ClientInterface {
 		System.out.println("Input initial balance:");
 		float initialBalance = sc.nextFloat();
 		accountInfo.setInitialBalance(initialBalance);
-		
-		
+				
 		return accountInfo;
 	}
 	
@@ -103,36 +114,132 @@ public class ClientInterface {
 //		System.out.println("Your account number is "+accountNum);
 		boolean success = response.isSuccess();
 		if(success) {
-			System.out.println(response.getMessage());
+			System.out.println("Account created Succesfully!");
 			System.out.println("Account Number is "+response.getAccountInfo().getAccountNum());
 		}
 		else {
-			System.out.println(response.getMessage());
+			System.out.println("Account creation failed!");
+			System.out.println("Error: "+response.getMessage());
 		}
 		
 	}
 	
-//	public void accountCreationError(String errorMessage) {
-//		System.out.println("Error: the account creation was not successful");
-//		System.out.println(errorMessage);
-//	}
-	
 	//2. close existing account
 	public AccountInfo closeAccount() {
-		Scanner sc = new Scanner(System.in);
 		AccountInfo accountInfo = new AccountInfo();
-		
-		System.out.println("Welcome to account closing");
-		
-		System.out.println("Input name:");
-		String name = sc.nextLine();
-		accountInfo.setName(name);
-		
-		
-		
-		
+		System.out.println("Welcome to account closing");	
+		this.verifyPassword(accountInfo);
 		return accountInfo;
 	}
+
+	public void accountClosingResult(Response response) {
+		boolean success = response.isSuccess();
+		if(success) {
+			System.out.println("Account closed successfully!");
+			// System.out.println(response.getMessage());
+		}
+		else {
+			System.out.println("Account closing failed!");
+			System.out.println("Error: "+response.getMessage());
+		}
+	}
+
+	//3. withdraw money
+	public AccountInfo withdrawMoney() {
+		Scanner sc = new Scanner(System.in);
+		AccountInfo accountInfo = new AccountInfo();
+		System.out.println("Welcome to money withdrawal");	
+		this.verifyPassword(accountInfo);
+		System.out.println("Please enter the withdrawal amount");
+		float change = sc.nextFloat();
+		accountInfo.setChange(change);
+		return accountInfo;
+	}
+
+	public void moneyWithdrawalResult(Response response) {
+		boolean success = response.isSuccess();
+		if(success) {
+			System.out.println("Money withdrawed successfully!");
+			System.out.println("Current balance is "+accountInfo.getCurrentBalance);
+		}
+		else {
+			System.out.println("Money withdrawl failed!");
+			System.out.println("Error: "+response.getMessage());
+		}
+	}
+
+	//4. deposit money
+	public AccountInfo depositMoney() {
+		Scanner sc = new Scanner(System.in);
+		AccountInfo accountInfo = new AccountInfo();
+		System.out.println("Welcome to money deposit");	
+		this.verifyPassword(accountInfo);
+		System.out.println("Please enter the deposit amount");
+		float change = sc.nextFloat();
+		accountInfo.setChange(change);
+		return accountInfo;
+	}
+
+	public void moeneyDepositResult(Response response) {
+		boolean success = response.isSuccess();
+		if(success) {
+			System.out.println("Money withdrawed successfully!");
+			System.out.println("Current balance is "+accountInfo.getCurrentBalance);
+		}
+		else {
+			System.out.println("Money withdrawl failed!");
+			System.out.println("Error: "+response.getMessage());
+		}
+	}
+
+	//5. monitor update
+	public int monitorUpdate(){
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Welcome to update monitoring");
+		int interval;
+		while(true){
+			System.out.println("Please enter your monitoring interval in minutes:");
+			interval = sc.nextInt();
+			if(interval>0){
+				break;
+			}else{
+				System.out.println("Error: Please enter a positive integer.");
+			}
+		}
+		return interval;
+	}
+
+	public void monitoringResult(Response response){
+		System.out.println(response.getMessage());
+		//do we just compose message at server side, or do we need proceesing of accountInfo field?
+	}
+
+	//6. get account balance
+	public AccountInfo getAccountBalance(){
+		System.out.prinln("Welcome to account balance checking");
+		AccountInfo accountinfo = new AccountInfo();
+		this.verifyPassword(accountInfo);
+		return accountinfo;
+	}
+
+	public accountBalanceResult(Response response){
+		boolean success = response.isSuccess();
+		if(success) {
+			System.out.println("Balance checking successfully!");
+			System.out.println("Current balance is "+accountInfo.getCurrentBalance);
+		}
+		else {
+			System.out.println("Balance checking failed!");
+			System.out.println("Error: "+response.getMessage());
+		}
+	}
+
+	//7. transfer fund
+	public transferFund(){
+
+	}
+
+
 	
 	
 }

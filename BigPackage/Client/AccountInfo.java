@@ -9,6 +9,8 @@ public class AccountInfo {
 	private CurrencyType cType; 
 	private float initialBalance;
 	private float currentBalance;
+	private float change;
+	private int destAccount;
 
 	public String getName() {
 		return name;
@@ -19,7 +21,7 @@ public class AccountInfo {
 	public int getAccountNum() {
 		return accountNum;
 	}
-	public void setAccountNum(int accountNum) {
+	public void setAccountNum(Integer accountNum) {
 		this.accountNum = accountNum;
 	}
 	public char[] getPassword() {
@@ -45,7 +47,20 @@ public class AccountInfo {
 	}
 	public void setCurrentBalance(float currentBalance) {
 		this.currentBalance = currentBalance;
-	}	
+	}
+	public float getChange() {
+		return change;
+	}
+	public void setChange(float change) {
+		this.change = change;
+	}
+	public int getDestAccount() {
+		return accountNum;
+	}
+	public void setDestAccoun(Integer accountNum) {
+		this.accountNum = accountNum;
+	}
+	
 	public AccountInfo() {
 		initialBalance = 0;
 	}
@@ -56,7 +71,7 @@ public class AccountInfo {
 		this.cType = cType;
 		this.initialBalance = initialBalance;
 		this.currentBalance = initialBalance;
-		this.accountNum = accountNum;
+		// this.accountNum = accountNum;	// number of string?
 	}
 	
 }

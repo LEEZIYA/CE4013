@@ -4,6 +4,7 @@ public class Response {
 	private String Message;
 	private boolean Success;
 	private AccountInfo accountInfo;
+	
 	public String getMessage() {
 		return Message;
 	}
