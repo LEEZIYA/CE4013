@@ -20,7 +20,7 @@ public class ClientService {
 
 		byte[] message = messageBuffer.toByte();
 		
-		byte[] reply = udpCLient.send(message);
+		byte[] reply = udpCLient.send(message); //Byte reply is where the reply from the server. This placehodler includes waiting.
 		//blocking wait for reponse?
 		Response response = new Response(); 
 
