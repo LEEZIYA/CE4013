@@ -59,6 +59,9 @@ public class Client5{
 
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             //out.write((byte)UseID);
+            out.write(0);
+            out.write(0);
+            out.write(0);
             out.write(msgcnt);
             out.write(bufferino);
             byte[] buffermax = out.toByteArray();
@@ -100,8 +103,9 @@ public class Client5{
 
         }
     } catch (SocketTimeoutException ex) {
-        System.out.println("Timeout error: " + ex.getMessage());
-        ex.printStackTrace();
+        System.out.println("Timeout error " +msgcnt);
+        //System.out.println("Timeout error: " + ex.getMessage());
+        //ex.printStackTrace();
         rsndflg=1;
         rsndcnt++;  
     } catch (IOException ex) {
