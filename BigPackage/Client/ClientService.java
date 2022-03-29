@@ -179,9 +179,9 @@ public class ClientService {
 		// //messageBuffer.marshInt(monitorInterval);
 
 		// byte[] message = messageBuffer.toByte();
-		int remainingTime = (int)(this.monitorEnd - System.currentTimeMillis())
+		int remainingTime = (int)(this.monitorEnd - System.currentTimeMillis());
 		
-		byte[] reply = udpCLient.listenMonitor(remainingTime);
+		byte[] reply = udpClient.listenMonitor(remainingTime);
 		// //blocking wait for response
 		Response response = new Response(); 
 

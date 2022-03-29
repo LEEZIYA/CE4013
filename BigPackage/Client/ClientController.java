@@ -84,7 +84,7 @@ public class ClientController {
 			Response response = this.clientService.getUpdate();
 			
 			if(!response.isSuccess()){ // check whether interval is finished
-				System.out.prinln("Monitoring stopped");
+				System.out.println("Monitoring stopped");
 				break; //informed by server that monitor interval over, stop monitoring
 			}
 			else{
