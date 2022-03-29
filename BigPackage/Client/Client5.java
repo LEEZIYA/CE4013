@@ -38,7 +38,7 @@ public class Client5{
 
     //Scanner sc = new Scanner(System.in);
 
-    double thres = 1; //USAGE : Used to set fault percentage. 1 means no fault and 0 means total fault. Scale accordingly.
+    double thres = 0.7; //USAGE : Used to set fault percentage. 1 means no fault and 0 means total fault. Scale accordingly.
 
     try{
         InetAddress address = InetAddress.getByName(hostname);
