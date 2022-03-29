@@ -4,17 +4,19 @@ import java.net.*;
 import java.util.Scanner;
 import java.math.*;
 
-public class Client2{
+public class Client4{
 
     private DatagramSocket socket;
+    public static byte[] bufferino;
  
-    public Client2(int port) throws SocketException {
+    public Client4(int port, byte b) throws SocketException {
+        bufferino = b;
         socket = new DatagramSocket(port);}
 
-    public static void main(String[] args){
+    public static byte sendMSG(String[] args){
         if (args.length < 2) {
             System.out.println("Syntax: QuoteClient <hostname> <port>");
-            return;
+            return 0;
     }
     int rsndcnt = 1;
     int rsndflg = 0;
@@ -26,7 +28,7 @@ public class Client2{
     String hostname = "localhost";
     int port = Integer.parseInt(args[1]);
 
-    Scanner sc = new Scanner(System.in);
+    //Scanner sc = new Scanner(System.in);
 
     double thres = 1;
 
@@ -41,9 +43,9 @@ public class Client2{
 
         while(x!=0){
 
-            System.out.println("Enter your request Mr. Customer: You can try \"New Account\" or \"Closing\" or \"Deposit\"");
-            String ssd = sc.nextLine();
-            byte buffermax[] = ssd.getBytes();
+            //System.out.println("Enter your request Mr. Customer: You can try \"New Account\" or \"Closing\" or \"Deposit\"");
+           // String ssd = sc.nextLine();
+            byte buffermax[] = bufferino;
 
             DatagramPacket request = new DatagramPacket(buffermax,buffermax.length,address,port);
             socket.send(request);
@@ -56,23 +58,23 @@ public class Client2{
             while(true)
             {
                 socket.receive(response);
-                System.out.println("HELLO");
+                System.out.println("HELLO MR. ERROR LOOP!");
                 if(Math.random()<thres)
                     break;
             }
 
-            System.out.println("Answer received: \n");
+            System.out.println("Answer received. \n");
 
-            String quote = new String(buffer, 0, response.getLength());
+            //String quote = new String(buffer, 0, response.getLength()); //Needs to be returned.
 
-            System.out.println(quote);
-            System.out.println();
+            //System.out.println(quote);
+            //System.out.println();
 
-            Thread.sleep(100);
+            //Thread.sleep(100);
 
-            System.out.println("Enter \"NO\" to stop communication else continue with any other input for the next prompt:");
-            if(sc.nextLine().equals("NO"))
-                x = 0;
+            //System.out.println("Enter \"NO\" to stop communication else continue with any other input for the next prompt:");
+           // if(sc.nextLine().equals("NO"))
+           //     x = 0;
 
         }
     } catch (SocketTimeoutException ex) {
@@ -96,6 +98,11 @@ public class Client2{
     break;
     }
     System.out.println("RSNDCNT LOOP LEFT!");
+    System.out.println("Communication failed after 4 attempts of receiving. Stop.");
+    if (rsndcnt == 4)
+        return 0;
+    else
+        return buffer;
 }
 
 }

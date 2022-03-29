@@ -4,11 +4,13 @@ import java.net.*;
 import java.util.Scanner;
 import java.math.*;
 
-public class Client2{
+public class Client3{
 
     private DatagramSocket socket;
- 
-    public Client2(int port) throws SocketException {
+    public static byte[] bufferino;
+    
+    public Client3(int port, byte a) throws SocketException {
+        bufferino=a;
         socket = new DatagramSocket(port);}
 
     public static void main(String[] args){
@@ -16,24 +18,17 @@ public class Client2{
             System.out.println("Syntax: QuoteClient <hostname> <port>");
             return;
     }
-    int rsndcnt = 1;
-    int rsndflg = 0;
-
-    while(rsndcnt<4)
-    {
-        System.out.println("ENTERED RSNDCNT LOOP: "+rsndcnt);
 
     String hostname = "localhost";
     int port = Integer.parseInt(args[1]);
 
-    Scanner sc = new Scanner(System.in);
+    //Scanner sc = new Scanner(System.in);
 
     double thres = 1;
 
     try{
         InetAddress address = InetAddress.getByName(hostname);
         DatagramSocket socket = new DatagramSocket();
-        socket.setSoTimeout(5000);
 
         System.out.println("Connection protocol initialized.");
 
@@ -41,9 +36,9 @@ public class Client2{
 
         while(x!=0){
 
-            System.out.println("Enter your request Mr. Customer: You can try \"New Account\" or \"Closing\" or \"Deposit\"");
-            String ssd = sc.nextLine();
-            byte buffermax[] = ssd.getBytes();
+           // System.out.println("Enter your request Mr. Customer: You can try \"New Account\" or \"Closing\" or \"Deposit\"");
+            //String ssd = sc.nextLine();
+            byte buffermax[] = bufferino;
 
             DatagramPacket request = new DatagramPacket(buffermax,buffermax.length,address,port);
             socket.send(request);
@@ -56,7 +51,6 @@ public class Client2{
             while(true)
             {
                 socket.receive(response);
-                System.out.println("HELLO");
                 if(Math.random()<thres)
                     break;
             }
@@ -70,32 +64,20 @@ public class Client2{
 
             Thread.sleep(100);
 
-            System.out.println("Enter \"NO\" to stop communication else continue with any other input for the next prompt:");
-            if(sc.nextLine().equals("NO"))
-                x = 0;
+            //System.out.println("Enter \"NO\" to stop communication else continue with any other input for the next prompt:");
+            //if(sc.nextLine().equals("NO"))
+            //    x = 0;
 
         }
     } catch (SocketTimeoutException ex) {
         System.out.println("Timeout error: " + ex.getMessage());
         ex.printStackTrace();
-        rsndflg=1;
-        rsndcnt++;  
     } catch (IOException ex) {
         System.out.println("Client error: " + ex.getMessage());
         ex.printStackTrace();
     } catch (InterruptedException ex) {
         ex.printStackTrace();
     }
-
-    if(rsndflg==1)
-    {
-        rsndflg=0;
-        continue;
     }
-
-    break;
-    }
-    System.out.println("RSNDCNT LOOP LEFT!");
 }
 
-}
