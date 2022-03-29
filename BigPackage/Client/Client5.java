@@ -4,22 +4,26 @@ import java.net.*;
 import java.util.Scanner;
 import java.math.*;
 
-public class Client4{
+public class Client5{
 
     private DatagramSocket socket;
     public static byte[] bufferino;
+    public static int msgcnt;
  
-    public Client4(int port, byte b) throws SocketException {
+    public Client5(int port, byte[] b) throws SocketException {
         bufferino = b;
-        socket = new DatagramSocket(port);}
+        socket = new DatagramSocket(port);
+        msgcnt = 0;
+    }
 
-    public static byte sendMSG(String[] args){
+    public static byte[] sendMSG(String[] args){
         if (args.length < 2) {
             System.out.println("Syntax: QuoteClient <hostname> <port>");
             return 0;
     }
     int rsndcnt = 1;
     int rsndflg = 0;
+    msgcnt++;
 
     while(rsndcnt<4)
     {
@@ -45,12 +49,24 @@ public class Client4{
 
             //System.out.println("Enter your request Mr. Customer: You can try \"New Account\" or \"Closing\" or \"Deposit\"");
            // String ssd = sc.nextLine();
-            byte buffermax[] = bufferino;
+           // byte buffermax[] = bufferino;
+
+            //ADDING MSGCNT per sent request.
+            
+            System.out.println("Non-Numbered Bytes: "+Arrays.toString(bufferino));
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            //out.write((byte)UseID);
+            out.write((byte)msgcnt);
+            out.write(bufferino);
+            byte[] buffermax = out.toByteArray();
+
+            System.out.println("Non-Numbered Bytes: "+Arrays.toString(buffermax));
 
             DatagramPacket request = new DatagramPacket(buffermax,buffermax.length,address,port);
             socket.send(request);
 
-            System.out.println("Request sent.");
+            System.out.println("Request sent. Request ID for given user: "+msgcnt);
 
             byte[] buffer = new byte[512];
             DatagramPacket response = new DatagramPacket(buffer, buffer.length);

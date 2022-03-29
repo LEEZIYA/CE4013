@@ -5,31 +5,27 @@ import java.math.*;
 
 import javax.lang.model.util.ElementScanner14;
 
-public class Server2{
+public class Server5{
 
 double thres = 1;
 int map[];
 int xx;
+InetAddress INA;
+int CP;
 
 	private DatagramSocket socket;
  
-	public Server4(int port) throws SocketException {
+	public Server5(int port) throws SocketException { // USAGE: Constructed once only per server run!
+
         socket = new DatagramSocket(port);
-        map = new int[128][128];
-        xx=0;
+        map = new int[512];
+        xx=-1;
     }
 
-	public static byte[] serverMSG(String[] args) {
-        if (args.length < 1) {
-            System.out.println("Syntax: QuoteServer <file> <port>");
-            return 0;
-        }
- 
-        int port = Integer.parseInt(args[0]);
- 
+	public static byte[] serverMsgWait(String[] args) { //USAGE: Used to receive a byte buffer and takes care of duplicates.
+
         try {
-            Server4 server = new Server4(port);
-            server.service();
+            return server.serviceReceive();
         } catch (SocketException ex) {
             System.out.println("Socket error: " + ex.getMessage());
         } catch (IOException ex) {
@@ -37,7 +33,10 @@ int xx;
         }
     }
 
-	private byte[] service() throws IOException {
+	private byte[] serviceReceive() throws IOException {
+
+        int retflg = 0;
+
         while (true) {
 
             System.out.println("Awaiting user input.");
@@ -61,18 +60,30 @@ int xx;
             byte[] MID = Arrays.copyOfRange(buffermax,0,4);
             buffermax = Arrays.copyOfRange(buffermax,4,buffermax.length);
 
-            int MsgID = MID;
+            int MsgID = (int)MID;
 
-            for(int i = 0; i<xx;i++)
+            for(int i = 0; i<=xx;i++)
             {
-                
+                if(MsgID==map[i])
+                    retflg = 1;
             }
+            if (reflg==1)
+                retflg = 0;
+                continue;
+            
+            xx++;
+            map[xx]=MsgID;
 
-            String reqdata = new String(buffermax, 0, request.getLength());
+            INA = request.getAddress();
+            CP = request.getPort();
 
-            System.out.println("Request: "+reqdata);
+            //String reqdata = new String(buffermax, 0, request.getLength());
 
-            byte[] buffer;
+           // System.out.println("Request: "+reqdata);
+
+            return buffermax;
+
+            /**byte[] buffer;
 
             if(reqdata.equals("New Account"))
             {
@@ -98,7 +109,17 @@ int xx;
             DatagramPacket response = new DatagramPacket(buffer, buffer.length, clientAddress, clientPort);
             //socket.send(response);
             System.out.println("Answer NOT REALLLY sent. \n");
+            **/
         }
+    }
+
+    public void serverMsgSend(byte[] a){
+ 
+        DatagramPacket response = new DatagramPacket(buffer, buffer.length, INA, CP);
+        socket.send(response);
+        System.out.println("Answer NOT REALLLY sent. \n");
+            
+
     }
 
 }
