@@ -12,8 +12,8 @@ public class Client5{
     public int msgcnt;
     public byte[] buffstore;
  
-    public Client5(int port) throws SocketException { // USAGE : Initialize and construct Client Socket. Provide port.
-        socket = new DatagramSocket(port);
+    public Client5(int portSRC) throws SocketException { // USAGE : Initialize and construct Client Socket. Provide port.
+        socket = new DatagramSocket(portSRC);
         msgcnt = 0;
     }
 
@@ -32,7 +32,7 @@ public class Client5{
         System.out.println("ENTERED RSNDCNT LOOP: "+rsndcnt);
 
     String hostname = "localhost";
-    int port = 17;
+    int port = 40500;
 
     //Scanner sc = new Scanner(System.in);
 
@@ -40,7 +40,7 @@ public class Client5{
 
     try{
         InetAddress address = InetAddress.getByName(hostname);
-        DatagramSocket socket = new DatagramSocket();
+        //DatagramSocket socket = new DatagramSocket();
         socket.setSoTimeout(5000);
 
         System.out.println("Connection protocol initialized.");

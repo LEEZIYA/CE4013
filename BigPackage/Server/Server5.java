@@ -19,6 +19,7 @@ public class Server5{
  
 	public Server5(int port) throws SocketException { // USAGE : Constructed once only per server run!
 
+        port = 40500;
         socket = new DatagramSocket(port);
         map = new int[512];
         xx=-1;

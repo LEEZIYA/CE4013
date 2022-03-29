@@ -10,9 +10,9 @@ public class ClientService {
 
 	public ClientService(){
 		try{
-			this.udpClient = new Client5(17); //port 17
+			udpClient = new Client5(40000); //port 17
 		} catch (Exception e){
-			System.out.println("error initializing client socket! please restart");
+			System.out.println("error initializing client socket! please restart" + e);
 		}
 	}
 
