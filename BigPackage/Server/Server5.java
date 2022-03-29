@@ -22,10 +22,10 @@ int CP;
         xx=-1;
     }
 
-	public static byte[] serverMsgWait(String[] args) { //USAGE : Used to receive a byte buffer and takes care of duplicates.
+	public byte[] serverMsgWait(String[] args) { //USAGE : Used to receive a byte buffer and takes care of duplicates.
 
         try {
-            return server.serviceReceive();
+            return serviceReceive();
         } catch (SocketException ex) {
             System.out.println("Socket error: " + ex.getMessage());
         } catch (IOException ex) {

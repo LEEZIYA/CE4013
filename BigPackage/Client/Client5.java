@@ -6,16 +6,16 @@ import java.math.*;
 
 public class Client5{
 
-    private DatagramSocket socket;
-    public static byte[] bufferino;
-    public static int msgcnt;
+    public DatagramSocket socket;
+    public byte[] bufferino;
+    public int msgcnt;
  
     public Client5(int port) throws SocketException { // USAGE : Initialize and construct Client Socket. Provide port.
         socket = new DatagramSocket(port);
         msgcnt = 0;
     }
 
-    public static byte[] sendMSG(byte[] b){ //USAGE : Used to send message of byte reference. Returns received message. Handles all faults. Returns 0 if fail.
+    public byte[] sendMSG(byte[] b){ //USAGE : Used to send message of byte reference. Returns received message. Handles all faults. Returns 0 if fail.
        // if (args.length < 2) {
        //     System.out.println("Syntax: QuoteClient <hostname> <port>");
         //    return 0;

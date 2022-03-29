@@ -5,6 +5,13 @@ import BigPackage.MarshBuffer;
 import BigPackage.MarshUtil;
 
 public class ClientService {
+
+	private Client5 udpClient;
+
+	public ClientService(){
+		this.udpClient = new Client5(17); //port 17
+	}
+
 	private boolean getSuccessStatus(MarshBuffer messageBuffer){
 		return (messageBuffer.unmarshShort()==1?true:false);
 	}
@@ -20,7 +27,7 @@ public class ClientService {
 
 		byte[] message = messageBuffer.toByte();
 		
-		byte[] reply = udpCLient.send(message); //Byte reply is where the reply from the server. This placehodler includes waiting.
+		byte[] reply = udpClient.sendMSG(message); //Byte reply is where the reply from the server. This placehodler includes waiting.
 		//blocking wait for reponse?
 		
 		Response response = new Response(); 
@@ -53,7 +60,7 @@ public class ClientService {
 
 		byte[] message = messageBuffer.toByte();
 		
-		byte[] reply = udpCLient.send(message);
+		byte[] reply = udpClient.sendMSG(message);
 		//blocking wait for reponse?
 		Response response = new Response(); 
 
@@ -82,7 +89,7 @@ public class ClientService {
 
 		byte[] message = messageBuffer.toByte();
 		
-		byte[] reply = udpCLient.send(message);
+		byte[] reply = udpClient.sendMSG(message);
 		//blocking wait for reponse?
 		Response response = new Response(); 
 
@@ -118,7 +125,7 @@ public class ClientService {
 
 		byte[] message = messageBuffer.toByte();
 		
-		byte[] reply = udpCLient.send(message);
+		byte[] reply = udpClient.sendMSG(message);
 		//blocking wait for reponse?
 		Response response = new Response(); 
 
@@ -151,7 +158,7 @@ public class ClientService {
 
 		byte[] message = messageBuffer.toByte();
 		
-		byte[] reply = udpCLient.unblocking_send(message);
+		byte[] reply = udpClient.unblocking_send(message);
 		//need an unblocking version of send
 		return;
 	}
@@ -196,7 +203,7 @@ public class ClientService {
 
 		byte[] message = messageBuffer.toByte();
 		
-		byte[] reply = udpCLient.send(message);
+		byte[] reply = udpClient.sendMSG(message);
 		//blocking wait for reponse?
 		Response response = new Response(); 
 
@@ -233,7 +240,7 @@ public class ClientService {
 
 		byte[] message = messageBuffer.toByte();
 		
-		byte[] reply = udpCLient.send(message);
+		byte[] reply = udpClient.sendMSG(message);
 		//blocking wait for reponse?
 		Response response = new Response(); 
 
