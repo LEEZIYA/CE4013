@@ -5,9 +5,15 @@ public class ServerController {
 
     private static final int MAX_REQUEST_BUF_SIZE = 1024;
     private WrapperService service;
+    private Server5 serverSocket;
 
     ServerController(){
         this.service = new WrapperService();
+        try{
+            this.serverSocket = new Server5(17);
+        } catch (Exception e){
+            System.out.println("got exception in initializing server5, please restart. ");
+        }
     }
 
     public void start() throws Exception{
@@ -25,6 +31,7 @@ public class ServerController {
             }
 
             // receive bunches of bytes
+            requestBuf = serverSocket.serverMsgWait();
 
             // for testing purpose only
             // BufferPointer writeBufPt = new BufferPointer();
@@ -71,8 +78,9 @@ public class ServerController {
             }
 
             // send response back
-            byte[] repsonse = service.getResponse();
-            int responseLength = service.getResponseLength();
+            // int responseLength = service.getResponseLength();
+            byte[] response = service.getResponse();
+            serverSocket.serverMsgSend(response);
 
             Thread.sleep(100);
         }

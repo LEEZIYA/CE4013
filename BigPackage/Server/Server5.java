@@ -24,7 +24,7 @@ public class Server5{
         xx=-1;
     }
 
-	public byte[] serverMsgWait(String[] args) { //USAGE : Used to receive a byte buffer and takes care of duplicates.
+	public byte[] serverMsgWait() { //USAGE : Used to receive a byte buffer and takes care of duplicates.
 
         try {
             return serviceReceive();
