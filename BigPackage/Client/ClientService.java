@@ -7,6 +7,8 @@ import BigPackage.MarshUtil;
 public class ClientService {
 
 	private Client5 udpClient;
+	//private int monitorTimeMilli;
+	private long monitorEnd;
 
 	public ClientService(){
 		try{
@@ -157,12 +159,13 @@ public class ClientService {
 	public void subscribeForUpdate(int monitorInterval){
 		MarshBuffer messageBuffer = new MarshBuffer(2+4);
 		messageBuffer.marshShort((short)3); //requestType
-
+		//this.monitorTimeMilli = monitorInterval*60*1000;
 		messageBuffer.marshInt(monitorInterval*60*1000);
 
 		byte[] message = messageBuffer.toByte();
 		
-		//byte[] reply = udpClient.unblocking_send(message);
+		udpClient.startMonitor(message);
+		this.monitorEnd = System.currentTimeMillis()+monitorInterval*60*1000;
 		//need an unblocking version of send
 		return;
 	}
@@ -176,19 +179,20 @@ public class ClientService {
 		// //messageBuffer.marshInt(monitorInterval);
 
 		// byte[] message = messageBuffer.toByte();
+		int remainingTime = (int)(this.monitorEnd - System.currentTimeMillis())
 		
-		// //byte[] reply = udpCLient.listen();
+		byte[] reply = udpCLient.listenMonitor(remainingTime);
 		// //blocking wait for response
 		Response response = new Response(); 
 
-		// MarshBuffer replyBuffer = new MarshBuffer(reply);
+		MarshBuffer replyBuffer = new MarshBuffer(reply);
 		
-        // boolean success = this.getSuccessStatus(replyBuffer);
-		// response.setSuccess(success);
+        boolean success = this.getSuccessStatus(replyBuffer);
+		response.setSuccess(success);
 		
-		// if(success){
-		// 	response.setMessage(replyBuffer.unmarshString());
-		// }			
+		if(success){
+			response.setMessage(replyBuffer.unmarshString());
+		}			
 		return response;
 		
 	}
