@@ -132,6 +132,7 @@ public class Server5{
 
     public void serverMsgSend(byte[] a) throws IOException{ //USAGE : Use this to reply to the client. Automatically handles sending message to last receiver.
  
+        oldmsg = a;
         DatagramPacket response = new DatagramPacket(a, a.length, INA, CP);
         socket.send(response);
         System.out.println("HERE IS THE FINAL SENDING:");
