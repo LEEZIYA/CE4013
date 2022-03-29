@@ -1,9 +1,13 @@
 package BigPackage.Server;
 import java.io.*;
 import java.net.*;
+import java.util.Arrays;
 import java.math.*;
 
 import javax.lang.model.util.ElementScanner14;
+
+import BigPackage.BufferPointer;
+import BigPackage.MarshUtil;
 
 public class Server5{
 
@@ -31,6 +35,7 @@ int CP;
         } catch (IOException ex) {
             System.out.println("I/O error: " + ex.getMessage());
         }
+        return null;
     }
 
 	private byte[] serviceReceive() throws IOException {
@@ -60,14 +65,14 @@ int CP;
             byte[] MID = Arrays.copyOfRange(buffermax,0,4);
             buffermax = Arrays.copyOfRange(buffermax,4,buffermax.length);
 
-            int MsgID = (int)MID;
+            int MsgID = MarshUtil.unmarshInt(MID, new BufferPointer());
 
             for(int i = 0; i<=xx;i++)
             {
                 if(MsgID==map[i])
                     retflg = 1;
             }
-            if (reflg==1)
+            if (retflg==1)
                 retflg = 0;
                 continue;
             
