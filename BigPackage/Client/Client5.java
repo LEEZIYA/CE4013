@@ -19,6 +19,19 @@ public class Client5{
         usms = 1;
     }
 
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
     public byte[] sendMSG(byte[] b){ //USAGE : Used to send message of byte reference. Returns received message. Handles all faults. Returns 0 if fail.
        // if (args.length < 2) {
        //     System.out.println("Syntax: QuoteClient <hostname> <port>");
@@ -136,6 +149,22 @@ public class Client5{
         return buffstore;
 }
 
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
 public void startMonitor(byte[] b){ //USAGE : Used to send message of byte reference. Returns received message. Handles all faults. Returns 0 if fail.
     // if (args.length < 2) {
     //     System.out.println("Syntax: QuoteClient <hostname> <port>");
@@ -251,5 +280,48 @@ public void startMonitor(byte[] b){ //USAGE : Used to send message of byte refer
  else
      System.out.println("Subscription Successful");
 }
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+public byte[] listenMonitor(int milli)
+{
+try{
+    socket.setSoTimeout(milli);
+    byte[] buffer = new byte[512];
+    DatagramPacket response = new DatagramPacket(buffer, buffer.length);
+
+    socket.receive(response);
+
+    System.out.println("Subscription received. \n");
+    System.out.println("They Sent: "+Arrays.toString(buffer));
+
+    return buffer;}
+    catch (SocketTimeoutException ex) {
+        System.out.println("Subscription Elapsed");
+        return new byte[0];
+    } 
+    catch(SocketException SEMILLI)
+    {
+        System.out.println("Subscription Elapsed");
+        return new byte[0];
+    }
+    catch (IOException ex) {
+        System.out.println("Client error: " + ex.getMessage());
+        ex.printStackTrace();
+        return new byte[0];
+    } 
+
+}
+
+
 
 }
