@@ -36,11 +36,13 @@ public class WrapperService {
         MarshUtil.marshString(errorMessage, responseBuf, writeBufPt);
     }
 
-    private void addSuccessResponseCode(){
+    void addSuccessResponseCode(){
         MarshUtil.marshShort((short)1, responseBuf, writeBufPt);
     }
 
-    public void openAccount() {     // TBD: exception types, exception content
+    public String openAccount() {     // TBD: exception types, exception content
+        String broadcastString = "New account %d created";
+
         responseBuf = new byte[2 + 4];
         CurrencyType cType = MarshUtil.unmarshCType(requestData, readBufPt);
         float initialBalance = MarshUtil.unmarshFloat(requestData, readBufPt);
@@ -51,10 +53,12 @@ public class WrapperService {
         addSuccessResponseCode();
         MarshUtil.marshInt(returnValue, responseBuf, writeBufPt);
 
-        // send broadcastUpdate
+        return String.format(broadcastString, returnValue);
     }
 
-    public void closeAccount() throws RequestException {
+    public String closeAccount() throws RequestException {
+        String broadcastString = "Account %d closed";
+
         responseBuf = new byte[2 + 2];
         CurrencyType cType = MarshUtil.unmarshCType(requestData, readBufPt);
         int accountNum = MarshUtil.unmarshInt(requestData, readBufPt);
@@ -63,11 +67,13 @@ public class WrapperService {
 
         coreService.closeAccount(accountNum, name, password, cType);
         addSuccessResponseCode();
-
-        // send broadcastUpdate
+        
+        return String.format(broadcastString, accountNum);
     }
  
-    public void changeBalance() throws RequestException{
+    public String changeBalance() throws RequestException{
+        String broadcastString = "Account %d updated balance by %f";
+
         responseBuf = new byte[2 + 4];
         CurrencyType cType = MarshUtil.unmarshCType(requestData, readBufPt);
         float change = MarshUtil.unmarshFloat(requestData, readBufPt);
@@ -78,17 +84,19 @@ public class WrapperService {
         float returnValue = coreService.changeBalance(accountNum, name, password, cType, change);
         addSuccessResponseCode();
         MarshUtil.marshFloat(returnValue, responseBuf, writeBufPt);
-
-        // send broadcastUpdate
+        
+        return String.format(broadcastString, accountNum, change);
     }
 
-    public float getMonitorInterval(){
+    public int getMonitorInterval(){
         responseBuf = new byte[2 + 4];
-        float monitorInterval = MarshUtil.unmarshFloat(requestData, readBufPt);
+        int monitorInterval = MarshUtil.unmarshInt(requestData, readBufPt);
         return monitorInterval;
     }
 
-    public void getAccountBalance() throws RequestException{
+    public String getAccountBalance() throws RequestException{
+        String broadcastString = "Account %d retrieved account balance";
+
         responseBuf = new byte[2 + 4];
         CurrencyType cType = MarshUtil.unmarshCType(requestData, readBufPt);
         int accountNum = MarshUtil.unmarshInt(requestData, readBufPt);
@@ -98,11 +106,13 @@ public class WrapperService {
         float returnValue = coreService.getAccountBalance(accountNum, name, password, cType);
         addSuccessResponseCode();
         MarshUtil.marshFloat(returnValue, responseBuf, writeBufPt);
-
-        // send broadcastUpdate
+        
+        return String.format(broadcastString, accountNum);
     }
 
-    public void transferFund() throws RequestException{
+    public String transferFund() throws RequestException{
+        String broadcastString = "Account %d transferred %f to account %d";
+
         responseBuf = new byte[2 + 4];
         CurrencyType cType = MarshUtil.unmarshCType(requestData, readBufPt);
         float amount = MarshUtil.unmarshFloat(requestData, readBufPt);
@@ -114,8 +124,14 @@ public class WrapperService {
         float returnValue = coreService.transferFund(accountNum, name, password, cType, destAccountNum, amount);
         addSuccessResponseCode();
         MarshUtil.marshFloat(returnValue, responseBuf, writeBufPt);
+        
+        return String.format(broadcastString, accountNum, amount, destAccountNum);
+    }
 
-        // send broadcastUpdate
+    public byte[] marshalBroadcastString(String broadcastString){
+        byte[] result = new byte[MarshUtil.getStringByteLen(broadcastString)];
+        MarshUtil.marshString(broadcastString, result, new BufferPointer());
+        return result;
     }
 
     public byte[] getResponse(){

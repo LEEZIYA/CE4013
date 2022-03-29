@@ -30,58 +30,53 @@ public class ServerController {
                 countdown = 10000;
             }
 
-            // receive bunches of bytes
             requestBuf = serverSocket.serverMsgWait();
 
-            // for testing purpose only
-            // BufferPointer writeBufPt = new BufferPointer();
-            // MarshUtil.marshShort((short)0, requestBuf, writeBufPt);
-            // MarshUtil.marshCType(CurrencyType.SGD, requestBuf, writeBufPt);
-            // MarshUtil.marshFloat(0.01f, requestBuf, writeBufPt);
-            // MarshUtil.marshCharArray("password".toCharArray(), requestBuf, writeBufPt);
-            // MarshUtil.marshString("John Doe", requestBuf, writeBufPt);
-            String ipAddr = "192.168.1.1";
-            short portNum = 80;
-            
             // reset the buffer pointers
             service.acceptNewRequest(requestBuf);
+            String broadcastString = "";
             try{
                 int requestType = service.decodeRequestType();
                 switch (requestType){
                     case 0:
-                        service.openAccount();
+                        broadcastString = service.openAccount();
                         break;
                     case 1:
-                        service.closeAccount();
+                        broadcastString = service.closeAccount();
                         break;
                     case 2:
-                        service.changeBalance();
+                        broadcastString = service.changeBalance();
                         break;
                     case 3:
-                        // ask socket layer to add client to broadcast list
-                        float monitorInterval = service.getMonitorInterval();
+                        int monitorInterval = service.getMonitorInterval();
+                        service.addSuccessResponseCode();
+                        // serverSocket.addList();
                         break;
                     case 4:
-                        service.getAccountBalance();
+                        broadcastString = service.getAccountBalance();
                         break;
                     case 5:
-                        service.transferFund();
+                        broadcastString = service.transferFund();
                         break;
                     default:
                         System.out.println("Unknown request type of " + requestType);
+                        throw new RequestException("Unknown request");
                 }
             } catch (RequestException e) {
-                System.out.println("RequestException occurred when handling request from " + ipAddr + ": " + portNum + ". "+ e);
+                System.out.println("RequestException occurred when handling request! "+ e);
                 service.addFailureResponse(e.getMessage());
             } catch (Exception e){
-                System.out.println("Exception occurred when handling request from " + ipAddr + ": " + portNum + ". "+ e);
+                System.out.println("Exception occurred when handling request! "+ e);
                 service.addFailureResponse("Server error");
             }
 
-            // send response back
-            // int responseLength = service.getResponseLength();
             byte[] response = service.getResponse();
             serverSocket.serverMsgSend(response);
+
+            if (broadcastString != ""){
+                System.out.println("broadcast string is: " + broadcastString);
+                // serverSocket.broadcast(service.marshalBroadcastString(broadcastString));
+            }
 
             Thread.sleep(100);
         }
