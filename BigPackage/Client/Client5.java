@@ -3,12 +3,14 @@ import java.io.*;
 import java.net.*;
 import java.util.Scanner;
 import java.math.*;
+import java.util.Arrays;
 
 public class Client5{
 
     public DatagramSocket socket;
     public byte[] bufferino;
     public int msgcnt;
+    public byte[] buffstore;
  
     public Client5(int port) throws SocketException { // USAGE : Initialize and construct Client Socket. Provide port.
         socket = new DatagramSocket(port);
@@ -19,7 +21,7 @@ public class Client5{
        // if (args.length < 2) {
        //     System.out.println("Syntax: QuoteClient <hostname> <port>");
         //    return 0;
-    
+    buffstore=new byte[512];
     bufferino = b;
     int rsndcnt = 1;
     int rsndflg = 0;
@@ -30,7 +32,7 @@ public class Client5{
         System.out.println("ENTERED RSNDCNT LOOP: "+rsndcnt);
 
     String hostname = "localhost";
-    int port = Integer.parseInt(args[1]);
+    int port = 17;
 
     //Scanner sc = new Scanner(System.in);
 
@@ -81,6 +83,8 @@ public class Client5{
 
             System.out.println("Answer received. \n");
 
+            buffstore = buffer;
+
             //String quote = new String(buffer, 0, response.getLength()); //Needs to be returned.
 
             //System.out.println(quote);
@@ -101,9 +105,9 @@ public class Client5{
     } catch (IOException ex) {
         System.out.println("Client error: " + ex.getMessage());
         ex.printStackTrace();
-    } catch (InterruptedException ex) {
-        ex.printStackTrace();
-    }
+    } //catch (InterruptedException ex) {
+       // ex.printStackTrace();
+  //  }
 
     if(rsndflg==1)
     {
@@ -116,9 +120,9 @@ public class Client5{
     System.out.println("RSNDCNT LOOP LEFT!");
     if (rsndcnt == 4){
         System.out.println("Communication failed after 4 attempts of receiving. Stop.");
-        return 0;}
+        return new byte[0];}
     else
-        return buffer;
+        return buffstore;
 }
 
 }
