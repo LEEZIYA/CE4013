@@ -180,7 +180,7 @@ public class ClientInterface {
 		return accountInfo;
 	}
 
-	public void moeneyDepositResult(Response response) {
+	public void moneyDepositResult(Response response) {
 		boolean success = response.isSuccess();
 		if(success) {
 			System.out.println("Money withdrawed successfully!");

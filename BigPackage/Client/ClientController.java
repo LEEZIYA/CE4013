@@ -58,19 +58,19 @@ public class ClientController {
 	}
 	public void closeAccount(){
 		AccountInfo closedAccount = this.clientUI.closeAccount();
-		Response response = this.clentService.closeAccount(closeAccount);
+		Response response = this.clientService.closeAccount(closedAccount);
 		this.clientUI.accountClosingResult(response);
 		return;
 	}
 	public void depositMoney(){
 		AccountInfo depositAccount = this.clientUI.depositMoney();
-		Response response = this.clentService.depositMoney(depositAccount);
+		Response response = this.clientService.depositMoney(depositAccount);
 		this.clientUI.moneyDepositResult(response);
 		return;
 	}
 	public void withdrawMoney(){
 		AccountInfo withdrawAccount = this.clientUI.withdrawMoney();
-		Response response = this.clentService.withdrawMoney(withdrawAccount);
+		Response response = this.clientService.withdrawMoney(withdrawAccount);
 		this.clientUI.moneyDepositResult(response);
 		return;
 	}
@@ -81,9 +81,9 @@ public class ClientController {
 		//need to make this non-blocking?
 		while(true){
 			//blocking wait for update
-			Response response = this.clentService.getUpdate(withdrawAccount);
+			Response response = this.clientService.getUpdate();
 			
-			if(!response.isSuccess){ // check whether interval is finished
+			if(!response.isSuccess()){ // check whether interval is finished
 				break; //informed by server that monitor interval over, stop monitoring
 			}
 			else{
