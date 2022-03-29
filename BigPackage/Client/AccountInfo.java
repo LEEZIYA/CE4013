@@ -71,7 +71,7 @@ public class AccountInfo {
 		this.cType = cType;
 		this.initialBalance = initialBalance;
 		this.currentBalance = initialBalance;
-		// this.accountNum = accountNum;	// number of string?
+		this.accountNum = accountNum;
 	}
 	
 }

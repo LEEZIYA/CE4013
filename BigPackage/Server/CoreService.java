@@ -34,6 +34,7 @@ public class CoreService {
             AccountInfo acc = accounts.get(i);
             if (acc.getAccountNum() == accountNum){
                 retrievedAccount = acc;
+                break;
             }
         }
     
@@ -45,7 +46,7 @@ public class CoreService {
 
     private AccountInfo getValidatedAccount(int accountNum, String name, char[] password, CurrencyType cType) throws RequestException {
         AccountInfo retrievedAccount = getAccount(accountNum);
-        if (retrievedAccount.getName() != name 
+        if (!retrievedAccount.getName().equals(name)
             || !Arrays.equals(retrievedAccount.getPassword(), password)
             || retrievedAccount.getcType() != cType){
             throw new RequestException("Invalid credentials");
