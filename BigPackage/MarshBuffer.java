@@ -14,7 +14,7 @@ public class MarshBuffer {
     
     public MarshBuffer(int numOfByte){
         this();
-        this.buf = new byte[numbOfByte];
+        this.buf = new byte[numOfByte];
     }
 
     public MarshBuffer(byte[] buf){
@@ -23,7 +23,7 @@ public class MarshBuffer {
     }
 
     public byte[] toByte() {
-        return Arrays.copyof(this.buf,this.buf.length);   
+        return Arrays.copyOf(this.buf,this.buf.length);   
     }
 
     public void marshInt(Integer data){
@@ -31,7 +31,7 @@ public class MarshBuffer {
     }
 
     public Integer unmarshInt(){
-        return MarshUtil.unmarshInt(data,this.buf,this.readBufPt);
+        return MarshUtil.unmarshInt(this.buf,this.readBufPt);
     }
 
     public void marshShort(Short data){
@@ -39,7 +39,7 @@ public class MarshBuffer {
     }
 
     public Short unmarshShort(){
-        return MarshUtil.unmarshS(data,this.buf,this.readBufPt);
+        return MarshUtil.unmarshShort(this.buf,this.readBufPt);
     }
 
     public void marshFloat(Float data){
@@ -47,23 +47,23 @@ public class MarshBuffer {
     }
 
     public Float unmarshFloat(){
-        return MarshUtil.unmarshFloat(data,this.buf,this.readBufPt);
+        return MarshUtil.unmarshFloat(this.buf,this.readBufPt);
     }
 
     public void marshString(String data){
         MarshUtil.marshString(data,this.buf,this.writeBufPt);
     }
 
-    public Float unmarshString(){
-        return MarshUtil.unmarshString(data,this.buf,this.readBufPt);
+    public String unmarshString(){
+        return MarshUtil.unmarshString(this.buf,this.readBufPt);
     }
 
     public void marshCharArray(char[] data){
         MarshUtil.marshCharArray(data,this.buf,this.writeBufPt);
     }
 
-    public Float unmarshCharArray(){
-        return MarshUtil.unmarshCharArray(data,this.buf,this.readBufPt);
+    public char[] unmarshCharArray(int len){
+        return MarshUtil.unmarshCharArray(this.buf,len,this.readBufPt);
     }
 
     public void marshCType(CurrencyType data){
@@ -71,7 +71,7 @@ public class MarshBuffer {
     }
 
     public CurrencyType unmarshCType(){
-        return MarshUtil.unmarshCtype(data,this.buf,this.readBufPt);
+        return MarshUtil.unmarshCType(this.buf,this.readBufPt);
     }
 
     

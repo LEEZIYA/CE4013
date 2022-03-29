@@ -9,7 +9,11 @@ public class ClientService {
 	private Client5 udpClient;
 
 	public ClientService(){
-		this.udpClient = new Client5(17); //port 17
+		try{
+			this.udpClient = new Client5(17); //port 17
+		} catch (Exception e){
+			System.out.println("error initializing client socket! please restart");
+		}
 	}
 
 	private boolean getSuccessStatus(MarshBuffer messageBuffer){
@@ -18,7 +22,7 @@ public class ClientService {
 
 	public Response openAccount(AccountInfo accountInfo) {
 		//marshalling
-		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountinfo.getName()));
+		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountInfo.getName()));
 		messageBuffer.marshShort((short)0); //requestType
 		messageBuffer.marshCType(accountInfo.getcType());
 		messageBuffer.marshFloat(accountInfo.getInitialBalance());
@@ -51,7 +55,7 @@ public class ClientService {
 	}
 	public Response closeAccount(AccountInfo accountInfo) {
 		//marshalling
-		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountinfo.getName()));
+		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountInfo.getName()));
 		messageBuffer.marshShort((short)1); //requestType
 		messageBuffer.marshCType(accountInfo.getcType());
 		messageBuffer.marshInt(accountInfo.getAccountNum());
@@ -78,11 +82,11 @@ public class ClientService {
 
 	public Response withdrawMoney(AccountInfo accountInfo) {
 		//marshalling
-		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountinfo.getName()));
+		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountInfo.getName()));
 		messageBuffer.marshShort((short)2); //requestType
 
 		messageBuffer.marshCType(accountInfo.getcType());
-		messageBUffer.marshFloat((-1)*accountInfo.getChange());
+		messageBuffer.marshFloat((-1)*accountInfo.getChange());
 		messageBuffer.marshInt(accountInfo.getAccountNum());
 		messageBuffer.marshCharArray(accountInfo.getPassword());
 		messageBuffer.marshString(accountInfo.getName());
@@ -114,11 +118,11 @@ public class ClientService {
 
 	public Response depositMoney(AccountInfo accountInfo) {
 		//marshalling
-		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountinfo.getName()));
+		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountInfo.getName()));
 		messageBuffer.marshShort((short)2); //requestType
 
 		messageBuffer.marshCType(accountInfo.getcType());
-		messageBUffer.marshFloat(accountInfo.getChange());
+		messageBuffer.marshFloat(accountInfo.getChange());
 		messageBuffer.marshInt(accountInfo.getAccountNum());
 		messageBuffer.marshCharArray(accountInfo.getPassword());
 		messageBuffer.marshString(accountInfo.getName());
@@ -151,21 +155,6 @@ public class ClientService {
 
 	//unblocking send
 	public void subscribeForUpdate(int monitorInterval){
-		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountinfo.getName()));
-		messageBuffer.marshShort((short)3); //requestType
-
-		messageBuffer.marshInt(monitorInterval);
-
-		byte[] message = messageBuffer.toByte();
-		
-		byte[] reply = udpClient.unblocking_send(message);
-		//need an unblocking version of send
-		return;
-	}
-
-	//blocking wait for message from server
-	public Response getUpdate() {
-		//marshalling
 		MarshBuffer messageBuffer = new MarshBuffer(2+4);
 		messageBuffer.marshShort((short)3); //requestType
 
@@ -173,18 +162,33 @@ public class ClientService {
 
 		byte[] message = messageBuffer.toByte();
 		
-		byte[] reply = udpCLient.listen();
-		//blocking wait for response
+		//byte[] reply = udpClient.unblocking_send(message);
+		//need an unblocking version of send
+		return;
+	}
+
+	//blocking wait for message from server
+	public Response getUpdate() {
+		// marshalling
+		// MarshBuffer messageBuffer = new MarshBuffer(2+4);
+		// messageBuffer.marshShort((short)3); //requestType
+
+		// //messageBuffer.marshInt(monitorInterval);
+
+		// byte[] message = messageBuffer.toByte();
+		
+		// //byte[] reply = udpCLient.listen();
+		// //blocking wait for response
 		Response response = new Response(); 
 
-		MarshBuffer replyBuffer = new MarshBuffer(reply);
+		// MarshBuffer replyBuffer = new MarshBuffer(reply);
 		
-        boolean success = this.getSuccessStatus(replyBuffer);
-		response.setSuccess(success);
+        // boolean success = this.getSuccessStatus(replyBuffer);
+		// response.setSuccess(success);
 		
-		if(success){
-			response.setMessage(replyBuffer.unmarshString());
-		}			
+		// if(success){
+		// 	response.setMessage(replyBuffer.unmarshString());
+		// }			
 		return response;
 		
 	}
@@ -193,7 +197,7 @@ public class ClientService {
 
 	public Response getAccountBalance(AccountInfo accountInfo) {
 		//marshalling
-		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountinfo.getName()));
+		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountInfo.getName()));
 		messageBuffer.marshShort((short)2); //requestType
 
 		messageBuffer.marshCType(accountInfo.getcType());
@@ -228,11 +232,11 @@ public class ClientService {
 
 	public Response transferFund(AccountInfo accountInfo) {
 		//marshalling
-		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+4+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountinfo.getName()));
+		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+4+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountInfo.getName()));
 		messageBuffer.marshShort((short)2); //requestType
 
 		messageBuffer.marshCType(accountInfo.getcType());
-		messageBUffer.marshFloat(accountInfo.getChange());
+		messageBuffer.marshFloat(accountInfo.getChange());
 		messageBuffer.marshInt(accountInfo.getDestAccount());
 		messageBuffer.marshInt(accountInfo.getAccountNum());
 		messageBuffer.marshCharArray(accountInfo.getPassword());

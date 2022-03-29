@@ -94,7 +94,7 @@ public class MarshUtil{
     }
 
     public static int getStringByteLen(char[] data){
-        return getStringByteLen(new String(data));
+        return 2 + getStringByteLen(new String(data));
     }
 
     public static void marshString(String data, byte[] out, BufferPointer bufPt){

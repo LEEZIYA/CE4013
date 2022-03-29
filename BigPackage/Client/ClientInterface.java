@@ -160,7 +160,7 @@ public class ClientInterface {
 		boolean success = response.isSuccess();
 		if(success) {
 			System.out.println("Money withdrawed successfully!");
-			System.out.println("Current balance is "+accountInfo.getCurrentBalance());
+			System.out.println("Current balance is "+response.getAccountInfo().getCurrentBalance());
 		}
 		else {
 			System.out.println("Money withdrawl failed!");
@@ -184,7 +184,7 @@ public class ClientInterface {
 		boolean success = response.isSuccess();
 		if(success) {
 			System.out.println("Money withdrawed successfully!");
-			System.out.println("Current balance is "+accountInfo.getCurrentBalance());
+			System.out.println("Current balance is "+response.getAccountInfo().getCurrentBalance());
 		}
 		else {
 			System.out.println("Money withdrawl failed!");
@@ -216,17 +216,17 @@ public class ClientInterface {
 
 	//6. get account balance
 	public AccountInfo getAccountBalance(){
-		System.out.prinln("Welcome to account balance checking");
-		AccountInfo accountinfo = new AccountInfo();
+		System.out.println("Welcome to account balance checking");
+		AccountInfo accountInfo = new AccountInfo();
 		this.verifyPassword(accountInfo);
-		return accountinfo;
+		return accountInfo;
 	}
 
 	public void accountBalanceResult(Response response){
 		boolean success = response.isSuccess();
 		if(success) {
 			System.out.println("Balance checking successfully!");
-			System.out.println("Current balance is "+accountInfo.getCurrentBalance());
+			System.out.println("Current balance is "+response.getAccountInfo().getCurrentBalance());
 		}
 		else {
 			System.out.println("Balance checking failed!");
@@ -237,12 +237,12 @@ public class ClientInterface {
 	//7. transfer fund
 	public AccountInfo transferFund(){
 		Scanner sc = new Scanner(System.in);
-		System.out.prinln("Welcome to fund transfer");
-		AccountInfo accountinfo = new AccountInfo();
+		System.out.println("Welcome to fund transfer");
+		AccountInfo accountInfo = new AccountInfo();
 		this.verifyPassword(accountInfo);
 		System.out.println("Please enter your destination account number");
 		int destAccount = sc.nextInt();
-		AccountInfo.setDestAccount(destAccount);
+		accountInfo.setDestAccount(destAccount);
 		System.out.println("Please enter your transfer amount");
 		float amount = sc.nextFloat();
 		accountInfo.setChange(amount);
@@ -254,7 +254,7 @@ public class ClientInterface {
 		boolean success = response.isSuccess();
 		if(success) {
 			System.out.println("Fund transfer successfully!");
-			System.out.println("Current balance is "+accountInfo.getCurrentBalance());
+			System.out.println("Current balance is "+response.getAccountInfo().getCurrentBalance());
 		}
 		else {
 			System.out.println("Balance checking failed!");
