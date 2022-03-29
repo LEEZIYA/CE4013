@@ -61,8 +61,13 @@ public class Server5{
             //Demystifying MSG for at Most Once Semantics.
 
            // byte[] UID = Arrays.copyOfRange(buffermax,0,4);
-            byte[] MID = Arrays.copyOfRange(buffermax,0,4);
-            buffermax = Arrays.copyOfRange(buffermax,4,buffermax.length);
+
+           System.out.println("Numbered Bytes: "+Arrays.toString(buffermax));
+
+            byte[] MID = Arrays.copyOfRange(buffermax,0,1);
+            buffermax = Arrays.copyOfRange(buffermax,1,buffermax.length);
+
+            System.out.println("Non-Numbered Bytes: "+Arrays.toString(buffermax));
 
             int MsgID = MarshUtil.unmarshInt(MID, new BufferPointer());
 

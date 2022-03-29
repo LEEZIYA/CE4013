@@ -59,11 +59,13 @@ public class Client5{
 
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             //out.write((byte)UseID);
-            out.write((byte)msgcnt);
+            out.write(msgcnt);
             out.write(bufferino);
             byte[] buffermax = out.toByteArray();
 
-            System.out.println("Non-Numbered Bytes: "+Arrays.toString(buffermax));
+            System.out.println("Numbered Bytes: "+Arrays.toString(buffermax));
+
+
 
             DatagramPacket request = new DatagramPacket(buffermax,buffermax.length,address,port);
             socket.send(request);
