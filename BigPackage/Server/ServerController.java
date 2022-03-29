@@ -59,6 +59,7 @@ public class ServerController {
                         break;
                     case 3:
                         // ask socket layer to add client to broadcast list
+                        float monitorInterval = service.getMonitorInterval();
                         break;
                     case 4:
                         service.getAccountBalance();

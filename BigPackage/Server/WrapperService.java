@@ -82,6 +82,12 @@ public class WrapperService {
         // send broadcastUpdate
     }
 
+    public float getMonitorInterval(){
+        responseBuf = new byte[2 + 4];
+        float monitorInterval = MarshUtil.unmarshFloat(requestData, readBufPt);
+        return monitorInterval;
+    }
+
     public void getAccountBalance() throws RequestException{
         responseBuf = new byte[2 + 4];
         CurrencyType cType = MarshUtil.unmarshCType(requestData, readBufPt);
