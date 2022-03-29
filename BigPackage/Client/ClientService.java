@@ -158,7 +158,7 @@ public class ClientService {
 		MarshBuffer messageBuffer = new MarshBuffer(2+4);
 		messageBuffer.marshShort((short)3); //requestType
 
-		messageBuffer.marshInt(monitorInterval);
+		messageBuffer.marshInt(monitorInterval*60*1000);
 
 		byte[] message = messageBuffer.toByte();
 		
@@ -198,7 +198,7 @@ public class ClientService {
 	public Response getAccountBalance(AccountInfo accountInfo) {
 		//marshalling
 		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountInfo.getName()));
-		messageBuffer.marshShort((short)2); //requestType
+		messageBuffer.marshShort((short)4); //requestType
 
 		messageBuffer.marshCType(accountInfo.getcType());
 		messageBuffer.marshInt(accountInfo.getAccountNum());
@@ -233,7 +233,7 @@ public class ClientService {
 	public Response transferFund(AccountInfo accountInfo) {
 		//marshalling
 		MarshBuffer messageBuffer = new MarshBuffer(2+1+4+4+4+MarshUtil.getStringByteLen(accountInfo.getPassword())+MarshUtil.getStringByteLen(accountInfo.getName()));
-		messageBuffer.marshShort((short)2); //requestType
+		messageBuffer.marshShort((short)5); //requestType
 
 		messageBuffer.marshCType(accountInfo.getcType());
 		messageBuffer.marshFloat(accountInfo.getChange());
