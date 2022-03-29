@@ -4,18 +4,16 @@ import java.net.*;
 import java.util.Arrays;
 import java.math.*;
 
-import javax.lang.model.util.ElementScanner14;
-
 import BigPackage.BufferPointer;
 import BigPackage.MarshUtil;
 
 public class Server5{
 
-double thres = 1; //USAGE : Setting success percentage.
-int map[];
-int xx;
-InetAddress INA;
-int CP;
+    double thres = 1; //USAGE : Setting success percentage.
+    int map[];
+    int xx;
+    InetAddress INA;
+    int CP;
 
 	private DatagramSocket socket;
  
@@ -72,10 +70,10 @@ int CP;
                 if(MsgID==map[i])
                     retflg = 1;
             }
-            if (retflg==1)
+            if (retflg==1){
                 retflg = 0;
                 continue;
-            
+            }
             xx++;
             map[xx]=MsgID;
 
@@ -118,13 +116,12 @@ int CP;
         }
     }
 
-    public void serverMsgSend(byte[] a){ //USAGE : Use this to reply to the client. Automatically handles sending message to last receiver.
+    public void serverMsgSend(byte[] a) throws IOException{ //USAGE : Use this to reply to the client. Automatically handles sending message to last receiver.
  
         DatagramPacket response = new DatagramPacket(a, a.length, INA, CP);
         socket.send(response);
         System.out.println("Answer NOT REALLLY sent. \n");
             
-
     }
 
 }
