@@ -88,7 +88,7 @@ public class MarshUtil{
 
     public static int getStringByteLen(String data){
         // UTF-8 is variable length encoding so not 1 char = 1 byte
-        return data.getBytes(CHARSET).length;
+        return 2 + data.getBytes(CHARSET).length;
     }
 
     public static int getStringByteLen(char[] data){
