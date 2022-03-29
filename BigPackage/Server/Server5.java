@@ -15,14 +15,14 @@ int CP;
 
 	private DatagramSocket socket;
  
-	public Server5(int port) throws SocketException { // USAGE: Constructed once only per server run!
+	public Server5(int port) throws SocketException { // USAGE : Constructed once only per server run!
 
         socket = new DatagramSocket(port);
         map = new int[512];
         xx=-1;
     }
 
-	public static byte[] serverMsgWait(String[] args) { //USAGE: Used to receive a byte buffer and takes care of duplicates.
+	public static byte[] serverMsgWait(String[] args) { //USAGE : Used to receive a byte buffer and takes care of duplicates.
 
         try {
             return server.serviceReceive();
@@ -113,7 +113,7 @@ int CP;
         }
     }
 
-    public void serverMsgSend(byte[] a){
+    public void serverMsgSend(byte[] a){ //USAGE : Use this to reply to the client. Automatically handles sending message to last receiver.
  
         DatagramPacket response = new DatagramPacket(buffer, buffer.length, INA, CP);
         socket.send(response);

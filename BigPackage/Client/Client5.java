@@ -10,17 +10,17 @@ public class Client5{
     public static byte[] bufferino;
     public static int msgcnt;
  
-    public Client5(int port, byte[] b) throws SocketException {
-        bufferino = b;
+    public Client5(int port) throws SocketException { // USAGE : Initialize and construct Client Socket. Provide port.
         socket = new DatagramSocket(port);
         msgcnt = 0;
     }
 
-    public static byte[] sendMSG(String[] args){
-        if (args.length < 2) {
-            System.out.println("Syntax: QuoteClient <hostname> <port>");
-            return 0;
-    }
+    public static byte[] sendMSG(byte[] b){ //USAGE : Used to send message of byte reference. Returns received message. Handles all faults. Returns 0 if fail.
+       // if (args.length < 2) {
+       //     System.out.println("Syntax: QuoteClient <hostname> <port>");
+        //    return 0;
+    
+    bufferino = b;
     int rsndcnt = 1;
     int rsndflg = 0;
     msgcnt++;
@@ -34,7 +34,7 @@ public class Client5{
 
     //Scanner sc = new Scanner(System.in);
 
-    double thres = 1;
+    double thres = 1; //USAGE : Used to set fault percentage. 1 means no fault and 0 means total fault. Scale accordingly.
 
     try{
         InetAddress address = InetAddress.getByName(hostname);
@@ -114,9 +114,9 @@ public class Client5{
     break;
     }
     System.out.println("RSNDCNT LOOP LEFT!");
-    System.out.println("Communication failed after 4 attempts of receiving. Stop.");
-    if (rsndcnt == 4)
-        return 0;
+    if (rsndcnt == 4){
+        System.out.println("Communication failed after 4 attempts of receiving. Stop.");
+        return 0;}
     else
         return buffer;
 }
