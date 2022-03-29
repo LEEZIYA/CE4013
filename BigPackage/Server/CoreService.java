@@ -22,7 +22,7 @@ public class CoreService {
     }
 
     public int openAccount(String name, char[] password, CurrencyType cType, float initialBalance) {
-        int accountNum = new Random().nextInt();
+        int accountNum = Math.abs(new Random().nextInt(10000));
         AccountInfo newAcc = new AccountInfo(name, password, cType, initialBalance, accountNum);
         accounts.add(newAcc);
         return accountNum;
