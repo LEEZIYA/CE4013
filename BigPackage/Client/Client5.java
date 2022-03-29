@@ -10,11 +10,13 @@ public class Client5{
     public DatagramSocket socket;
     public byte[] bufferino;
     public int msgcnt;
+    public int usms;
     public byte[] buffstore;
  
     public Client5(int portSRC) throws SocketException { // USAGE : Initialize and construct Client Socket. Provide port.
         socket = new DatagramSocket(portSRC);
         msgcnt = 0;
+        usms = 1;
     }
 
     public byte[] sendMSG(byte[] b){ //USAGE : Used to send message of byte reference. Returns received message. Handles all faults. Returns 0 if fail.
@@ -45,9 +47,6 @@ public class Client5{
 
         System.out.println("Connection protocol initialized.");
 
-        int x = 1;
-
-        while(x!=0){
 
             //System.out.println("Enter your request Mr. Customer: You can try \"New Account\" or \"Closing\" or \"Deposit\"");
            // String ssd = sc.nextLine();
@@ -59,6 +58,10 @@ public class Client5{
 
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             //out.write((byte)UseID);
+            out.write(0);
+            out.write(0);
+            out.write(0);
+            out.write(usms);
             out.write(0);
             out.write(0);
             out.write(0);
@@ -90,6 +93,8 @@ public class Client5{
 
             buffstore = buffer;
 
+            System.out.println("They Sent: "+Arrays.toString(buffstore));
+
             //String quote = new String(buffer, 0, response.getLength()); //Needs to be returned.
 
             //System.out.println(quote);
@@ -101,7 +106,7 @@ public class Client5{
            // if(sc.nextLine().equals("NO"))
            //     x = 0;
 
-        }
+        
     } catch (SocketTimeoutException ex) {
         System.out.println("Timeout error " +msgcnt);
         //System.out.println("Timeout error: " + ex.getMessage());

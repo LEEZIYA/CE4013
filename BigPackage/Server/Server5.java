@@ -10,10 +10,11 @@ import BigPackage.MarshUtil;
 public class Server5{
 
     double thres = 1; //USAGE : Setting success percentage.
-    int map[];
+    int map[][];
     int xx;
     InetAddress INA;
     int CP;
+    byte[] oldmsg;
 
 	private DatagramSocket socket;
  
@@ -21,7 +22,7 @@ public class Server5{
 
         port = 40500;
         socket = new DatagramSocket(port);
-        map = new int[512];
+        map = new int[512][512];
         xx=-1;
     }
 
@@ -64,27 +65,34 @@ public class Server5{
 
            System.out.println("Numbered Bytes: "+Arrays.toString(buffermax));
 
-            byte[] MID = Arrays.copyOfRange(buffermax,0,4);
-            buffermax = Arrays.copyOfRange(buffermax,4,buffermax.length);
+            byte[] USMS = Arrays.copyOfRange(buffermax,0,4);
+            byte[] MID = Arrays.copyOfRange(buffermax,4,8);
+            buffermax = Arrays.copyOfRange(buffermax,8,buffermax.length);
 
             System.out.println("Non-Numbered Bytes: "+Arrays.toString(buffermax));
 
+            int UidID = MarshUtil.unmarshInt(USMS, new BufferPointer());
             int MsgID = MarshUtil.unmarshInt(MID, new BufferPointer());
 
             for(int i = 0; i<=xx;i++)
             {
-                if(MsgID==map[i])
+                if(MsgID==map[i][i])
                     retflg = 1;
             }
             if (retflg==1){
                 retflg = 0;
+                serverMsgSend(oldmsg);
                 continue;
             }
             xx++;
-            map[xx]=MsgID;
+            map[xx][xx]=MsgID;
+            System.out.println("New Message Created.");
 
             INA = request.getAddress();
             CP = request.getPort();
+
+            System.out.println(INA);
+            System.out.println(CP);
 
             //String reqdata = new String(buffermax, 0, request.getLength());
 
@@ -126,6 +134,8 @@ public class Server5{
  
         DatagramPacket response = new DatagramPacket(a, a.length, INA, CP);
         socket.send(response);
+        System.out.println("HERE IS THE FINAL SENDING:");
+        System.out.println(Arrays.toString(a));
         System.out.println("Answer NOT REALLLY sent. \n");
             
     }

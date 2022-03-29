@@ -45,8 +45,10 @@ public class ClientInterface {
 		String name = sc.nextLine();
 		System.out.println("Please Enter Your Account Number:");
 		int accountNum = sc.nextInt();
-		System.out.println("Please Enter Your Password");
-		char[] password = sc.nextLine().toCharArray();
+		sc.nextLine();
+		System.out.println("Please Enter Your Password: ");
+		String passwordStr = sc.nextLine();
+		char[] password = passwordStr.toCharArray();
 
 		accountInfo.setName(name);
 		accountInfo.setAccountNum(accountNum);
@@ -126,9 +128,32 @@ public class ClientInterface {
 	
 	//2. close existing account
 	public AccountInfo closeAccount() {
+		Scanner sc = new Scanner(System.in);
 		AccountInfo accountInfo = new AccountInfo();
 		System.out.println("Welcome to account closing");	
 		this.verifyPassword(accountInfo);
+
+		System.out.println("Choose your currency type:");
+		int count=0;
+		for (CurrencyType currency : CurrencyType.values()){
+			count++;
+			System.out.println(count+". "+currency);
+			
+		}
+		System.out.println("Input the corresponding number:");
+		int currencyInput = sc.nextInt();
+		while(true) {
+			if (currencyInput<1 || currencyInput>CurrencyType.values().length) {
+				System.out.println("please input number between 1 and "+CurrencyType.values().length);
+				currencyInput = sc.nextInt();
+			}
+			else {
+				break;
+			}
+		}
+		CurrencyType currency = CurrencyType.values()[currencyInput];
+		accountInfo.setcType(currency);
+
 		return accountInfo;
 	}
 
