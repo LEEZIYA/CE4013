@@ -52,7 +52,7 @@ public class Client5{
 
     while(rsndcnt<4)
     {
-        System.out.println("ENTERED RSNDCNT LOOP: "+rsndcnt);
+        //System.out.println("ENTERED RSNDCNT LOOP: "+rsndcnt); DEBUGERY
 
     String hostname = "localhost";
     int port = 40500;
@@ -69,7 +69,7 @@ public class Client5{
         //servip = InetAddress.getByName(xxx);
         socket.setSoTimeout(5000);
 
-        System.out.println("Connection protocol initialized.");
+        //DEBUGERYSystem.out.println("Connection protocol initialized.");
 
 
             //System.out.println("Enter your request Mr. Customer: You can try \"New Account\" or \"Closing\" or \"Deposit\"");
@@ -113,11 +113,11 @@ public class Client5{
                     break;}
             }
 
-            System.out.println("Answer received. \n");
+           //DEBUGERY System.out.println("Answer received. \n");
 
             buffstore = buffer;
 
-            System.out.println("They Sent: "+Arrays.toString(buffstore));
+            //DEBUGERYSystem.out.println("They Sent: "+Arrays.toString(buffstore));
 
             //String quote = new String(buffer, 0, response.getLength()); //Needs to be returned.
 
@@ -152,7 +152,7 @@ public class Client5{
 
     break;
     }
-    System.out.println("RSNDCNT LOOP LEFT!");
+    //DEBUGERYSystem.out.println("RSNDCNT LOOP LEFT!");
     if (rsndcnt == 20){
         System.out.println("Communication failed after "+rsndcnt+" attempts of receiving. Stop.");
         return new byte[0];}
@@ -188,7 +188,7 @@ public void startMonitor(byte[] b){ //USAGE : Used to send message of byte refer
 
  while(rsndcnt<4)
  {
-     System.out.println("ENTERED RSNDCNT LOOP: "+rsndcnt);
+    //DEBUGERY System.out.println("ENTERED RSNDCNT LOOP: "+rsndcnt);
 
  String hostname = "localhost";
  int port = 40500;
@@ -241,16 +241,16 @@ public void startMonitor(byte[] b){ //USAGE : Used to send message of byte refer
          while(true)
          {
              socket.receive(response);
-             System.out.println("HELLO MR. ERROR LOOP!");
+            //DEBUGERY System.out.println("HELLO MR. ERROR LOOP!");
              if(Math.random()<thres)
                  break;
          }
 
-         System.out.println("Answer received. \n");
+        //DEBUGERY System.out.println("Answer received. \n");
 
          buffstore = buffer;
 
-         System.out.println("They Sent: "+Arrays.toString(buffstore));
+         //DEBUGERY System.out.println("They Sent: "+Arrays.toString(buffstore));
 
          //String quote = new String(buffer, 0, response.getLength()); //Needs to be returned.
 
@@ -285,7 +285,7 @@ public void startMonitor(byte[] b){ //USAGE : Used to send message of byte refer
 
  break;
  }
- System.out.println("RSNDCNT LOOP LEFT!");
+  //DEBUGERY.println("RSNDCNT LOOP LEFT!");
  if (rsndcnt == 20){
      System.out.println("Subscription failed after 20 attempts of receiving. Stop.");}
  else
@@ -312,17 +312,17 @@ try{
 
     socket.receive(response);
 
-    System.out.println("Subscription received. \n");
-    System.out.println("They Sent: "+Arrays.toString(buffer));
+    //DEBUGERY System.out.println("Subscription received. \n");
+    //DEBUGERY System.out.println("They Sent: "+Arrays.toString(buffer));
 
     return buffer;}
     catch (SocketTimeoutException ex) {
-        System.out.println("Subscription Elapsed");
+        System.out.println("Subscription Elapsed.");
         return new byte[0];
     } 
     catch(SocketException SEMILLI)
     {
-        System.out.println("Subscription Elapsed");
+        System.out.println("Subscription Elapsed.");
         return new byte[0];
     }
     catch (IOException ex) {

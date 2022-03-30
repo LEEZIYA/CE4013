@@ -73,7 +73,7 @@ public class Server5{
 
         while (true) {
 
-            System.out.println("Awaiting user input.");
+            System.out.println("Awaiting user input...");
 
             byte[] buffermax = new byte[512];
             DatagramPacket request = new DatagramPacket(buffermax, buffermax.length);
@@ -86,7 +86,7 @@ public class Server5{
                     break;
             }}
 
-            System.out.println("Request received.");
+            //DEBUGERY System.out.println("Request received.");
 
             //Demystifying MSG for at Most Once Semantics.
 
@@ -120,14 +120,14 @@ public class Server5{
                         xx++;
                         map[xx][0] = UidID;
                         map[xx][1] = MsgID;
-                        System.out.println("New Message Created.");
+                        System.out.println("New Message Sent.");
                     }
 
             INA = request.getAddress();
             CP = request.getPort();
 
-            System.out.println(INA);
-            System.out.println(CP);
+           //DEBUGERY  System.out.println(INA);
+           //DEBUGERY  System.out.println(CP);
 
             //String reqdata = new String(buffermax, 0, request.getLength());
 
@@ -170,9 +170,9 @@ public class Server5{
         oldmsg = a;
         DatagramPacket response = new DatagramPacket(a, a.length, INA, CP);
         socket.send(response);
-        System.out.println("HERE IS THE FINAL SENDING:");
-        System.out.println(Arrays.toString(a));
-        System.out.println("Answer sent. \n");
+       //DEBUGERY  System.out.println("HERE IS THE FINAL SENDING:");
+       //DEBUGERY  System.out.println(Arrays.toString(a));
+       //DEBUGERY  System.out.println("Answer sent. \n");
             
     }
 
@@ -181,9 +181,10 @@ public class Server5{
         try{
         DatagramPacket response = new DatagramPacket(a, a.length, b, c);
         socket.send(response);
-        System.out.println("HERE IS THE SUB FINAL SENDING:");
-        System.out.println(Arrays.toString(a));
-        System.out.println("Answer sent. \n");}
+      //DEBUGERY   System.out.println("HERE IS THE SUB FINAL SENDING:");
+       //DEBUGERY  System.out.println(Arrays.toString(a));
+       //DEBUGERY  System.out.println("Answer sent. \n");
+        }
         catch(Exception e)
         {
             System.out.println("Exception occurs at serverMsgSendParam");
@@ -193,14 +194,14 @@ public class Server5{
     }
 
     public void addList(long millitime){
-        System.out.println("Starting the ADDLIST PROTOCOL");
+        //DEBUGERY System.out.println("Starting the ADDLIST PROTOCOL");
         Slistcnt++;
         Slist[Slistcnt]= new Subs(INA,CP,millitime);
         System.out.println("Added new SUB.");
         System.out.println("StartTime: "+Slist[Slistcnt].startTime);
         System.out.println("IntervalTime: "+Slist[Slistcnt].intervalTime);
         System.out.println("EndTime: "+Slist[Slistcnt].endTime);
-        System.out.println("Something was added to SUBS.");
+       //DEBUGERY  System.out.println("Something was added to SUBS.");
     }
 
     public void broadcastList(byte[] bmsg){
@@ -212,7 +213,7 @@ public class Server5{
         if(Slistcnt>-1)
         {
 
-            System.out.println("Evaluating Subs");
+          //DEBUGERY   System.out.println("Evaluating Subs");
 
             Subs[] Nlist = new Subs[50];
             int Nlistcnt = -1;
