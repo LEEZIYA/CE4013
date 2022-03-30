@@ -10,8 +10,8 @@ public class ClientInterface {
 		
 		System.out.println("1.Open New Account");
 		System.out.println("2.Close Existing Account");
-		System.out.println("3.Deposit Money");
-		System.out.println("4.Withdraw Money");
+		System.out.println("3.Withdraw Money");
+		System.out.println("4.Deposit Money");
 		System.out.println("5.Monitor Update at Server");
 		System.out.println("6.Check Account Balance");
 		System.out.println("7.Transfer Funds");
@@ -56,6 +56,30 @@ public class ClientInterface {
 		return;
 		
 	}
+
+	private void getCurrencyType(AccountInfo accountInfo){
+		System.out.println("Choose your currency type:");
+		int count=0;
+		for (CurrencyType currency : CurrencyType.values()){
+			count++;
+			System.out.println(count+". "+currency);
+			
+		}
+		System.out.println("Input the corresponding number:");
+		int currencyInput = sc.nextInt();
+		while(true) {
+			if (currencyInput<1 || currencyInput>CurrencyType.values().length) {
+				System.out.println("please input number between 1 and "+CurrencyType.values().length);
+				currencyInput = sc.nextInt();
+			}
+			else {
+				break;
+			}
+		}
+		CurrencyType currency = CurrencyType.values()[currencyInput-1];
+		accountInfo.setcType(currency);
+	}
+
 	//1. create account
 	public AccountInfo createAccount() {
 		
@@ -83,26 +107,7 @@ public class ClientInterface {
 		}
 		accountInfo.setPassword(password);
 		
-		System.out.println("Choose your currency type:");
-		int count=0;
-		for (CurrencyType currency : CurrencyType.values()){
-			count++;
-			System.out.println(count+". "+currency);
-			
-		}
-		System.out.println("Input the corresponding number:");
-		int currencyInput = sc.nextInt();
-		while(true) {
-			if (currencyInput<1 || currencyInput>CurrencyType.values().length) {
-				System.out.println("please input number between 1 and "+CurrencyType.values().length);
-				currencyInput = sc.nextInt();
-			}
-			else {
-				break;
-			}
-		}
-		CurrencyType currency = CurrencyType.values()[currencyInput];
-		accountInfo.setcType(currency);
+		this.getCurrencyType(accountInfo);
 		
 		System.out.println("Input initial balance:");
 		float initialBalance = sc.nextFloat();
@@ -132,27 +137,7 @@ public class ClientInterface {
 		AccountInfo accountInfo = new AccountInfo();
 		System.out.println("Welcome to account closing");	
 		this.verifyPassword(accountInfo);
-
-		System.out.println("Choose your currency type:");
-		int count=0;
-		for (CurrencyType currency : CurrencyType.values()){
-			count++;
-			System.out.println(count+". "+currency);
-			
-		}
-		System.out.println("Input the corresponding number:");
-		int currencyInput = sc.nextInt();
-		while(true) {
-			if (currencyInput<1 || currencyInput>CurrencyType.values().length) {
-				System.out.println("please input number between 1 and "+CurrencyType.values().length);
-				currencyInput = sc.nextInt();
-			}
-			else {
-				break;
-			}
-		}
-		CurrencyType currency = CurrencyType.values()[currencyInput];
-		accountInfo.setcType(currency);
+		this.getCurrencyType(accountInfo);
 
 		return accountInfo;
 	}
@@ -176,26 +161,7 @@ public class ClientInterface {
 		System.out.println("Welcome to money withdrawal");	
 		this.verifyPassword(accountInfo);
 
-		System.out.println("Choose your currency type:");
-		int count=0;
-		for (CurrencyType currency : CurrencyType.values()){
-			count++;
-			System.out.println(count+". "+currency);
-			
-		}
-		System.out.println("Input the corresponding number:");
-		int currencyInput = sc.nextInt();
-		while(true) {
-			if (currencyInput<1 || currencyInput>CurrencyType.values().length) {
-				System.out.println("please input number between 1 and "+CurrencyType.values().length);
-				currencyInput = sc.nextInt();
-			}
-			else {
-				break;
-			}
-		}
-		CurrencyType currency = CurrencyType.values()[currencyInput];
-		accountInfo.setcType(currency);
+		this.getCurrencyType(accountInfo);
 
 		System.out.println("Please enter the withdrawal amount");
 		float change = sc.nextFloat();
@@ -221,27 +187,7 @@ public class ClientInterface {
 		AccountInfo accountInfo = new AccountInfo();
 		System.out.println("Welcome to money deposit");	
 		this.verifyPassword(accountInfo);
-
-		System.out.println("Choose your currency type:");
-		int count=0;
-		for (CurrencyType currency : CurrencyType.values()){
-			count++;
-			System.out.println(count+". "+currency);		
-		}
-		System.out.println("Input the corresponding number:");
-		int currencyInput = sc.nextInt();
-		while(true) {
-			if (currencyInput<1 || currencyInput>CurrencyType.values().length) {
-				System.out.println("please input number between 1 and "+CurrencyType.values().length);
-				currencyInput = sc.nextInt();
-			}
-			else {
-				break;
-			}
-		}
-		CurrencyType currency = CurrencyType.values()[currencyInput];
-		accountInfo.setcType(currency);
-
+		this.getCurrencyType(accountInfo);
 		System.out.println("Please enter the deposit amount");
 		float change = sc.nextFloat();
 		accountInfo.setChange(change);
@@ -288,26 +234,7 @@ public class ClientInterface {
 		System.out.println("Welcome to account balance checking");
 		AccountInfo accountInfo = new AccountInfo();
 		this.verifyPassword(accountInfo);
-
-		System.out.println("Choose your currency type:");
-		int count=0;
-		for (CurrencyType currency : CurrencyType.values()){
-			count++;
-			System.out.println(count+". "+currency);		
-		}
-		System.out.println("Input the corresponding number:");
-		int currencyInput = sc.nextInt();
-		while(true) {
-			if (currencyInput<1 || currencyInput>CurrencyType.values().length) {
-				System.out.println("please input number between 1 and "+CurrencyType.values().length);
-				currencyInput = sc.nextInt();
-			}
-			else {
-				break;
-			}
-		}
-		CurrencyType currency = CurrencyType.values()[currencyInput];
-		accountInfo.setcType(currency);
+		this.getCurrencyType(accountInfo);
 
 		return accountInfo;
 	}
@@ -330,28 +257,7 @@ public class ClientInterface {
 		System.out.println("Welcome to fund transfer");
 		AccountInfo accountInfo = new AccountInfo();
 		this.verifyPassword(accountInfo);
-
-		System.out.println("Choose your currency type:");
-		int count=0;
-		for (CurrencyType currency : CurrencyType.values()){
-			count++;
-			System.out.println(count+". "+currency);
-			
-		}
-		System.out.println("Input the corresponding number:");
-		int currencyInput = sc.nextInt();
-		while(true) {
-			if (currencyInput<1 || currencyInput>CurrencyType.values().length) {
-				System.out.println("please input number between 1 and "+CurrencyType.values().length);
-				currencyInput = sc.nextInt();
-			}
-			else {
-				break;
-			}
-		}
-		CurrencyType currency = CurrencyType.values()[currencyInput];
-		accountInfo.setcType(currency);
-
+		this.getCurrencyType(accountInfo);
 		System.out.println("Please enter your destination account number");
 		int destAccount = sc.nextInt();
 		accountInfo.setDestAccount(destAccount);
