@@ -82,14 +82,11 @@ public class ClientController {
 		while(true){
 			//blocking wait for update
 			Response response = this.clientService.getUpdate();
-			
+			this.clientUI.monitoringResult(response);
 			if(!response.isSuccess()){ // check whether interval is finished
-				System.out.println("Monitoring finished");
 				break; //informed by server that monitor interval over, stop monitoring
 			}
-			else{
-				this.clientUI.monitoringResult(response); //print out response
-			}
+
 			//else continue looping and monitoring
 		}
 		return;
