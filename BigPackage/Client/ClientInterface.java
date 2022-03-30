@@ -4,6 +4,21 @@ import BigPackage.CurrencyType;
 import java.util.Scanner;
 
 public class ClientInterface {
+
+	public int getPort(){
+		System.out.println("Please enter the port you want to use:");
+		Scanner sc = new Scanner(System.in);
+		int port = sc.nextInt();
+		sc.nextLine();
+		return port;
+	}
+	public String getAddress(){
+		System.out.println("Please enter the IP you want to connect to:");
+		Scanner sc = new Scanner(System.in);
+		String address = sc.nextLine();
+		return address;
+	}
+
 	public int startMenu() {
 		System.out.println("Thank you for using the DSB client");
 		System.out.println("Below is the list of services available:");
