@@ -73,6 +73,7 @@ public class ClientInterface {
 	}
 
 	private void getCurrencyType(AccountInfo accountInfo){
+		Scanner sc = new Scanner(System.in);
 		System.out.println("Choose your currency type:");
 		int count=0;
 		for (CurrencyType currency : CurrencyType.values()){
