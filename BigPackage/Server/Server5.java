@@ -3,7 +3,7 @@ import java.io.*;
 import java.net.*;
 import java.util.Arrays;
 import java.util.Date;
-
+import java.net.InetAddress;
 import javax.lang.model.util.ElementScanner14;
 
 import java.math.*;
@@ -15,7 +15,7 @@ public class Server5{
 
     boolean ATMOSTFLAG = true; //USAGE: 1 for At Most Semantics. 0 for At Least Semantics.
 
-    double thres = 1; //USAGE : Setting success percentage.
+    double thres = 0.8; //USAGE : Setting success percentage.
     int map[][];
     int xx;
     InetAddress INA;
@@ -28,12 +28,19 @@ public class Server5{
  
 	public Server5(int port) throws SocketException { // USAGE : Constructed once only per server run!
 
-        port = 40500;
+       try{ port = 40500;
         socket = new DatagramSocket(port);
         map = new int[1024][2];
         xx=-1;
         Slist = new Subs[20];
         Slistcnt =  -1;
+        InetAddress tp = InetAddress.getLocalHost();
+        System.out.println("IP Address:- " + tp.getHostAddress());
+        System.out.println("Host Name:- " + tp.getHostName());}
+        catch(Exception e)
+        {
+            System.out.println("Client Constructor Fault.");
+        }
     }
 
 	public byte[] serverMsgWait() { //USAGE : Used to receive a byte buffer and takes care of duplicates.

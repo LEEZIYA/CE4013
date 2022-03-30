@@ -4,7 +4,7 @@ import java.net.*;
 import java.util.Scanner;
 import java.math.*;
 import java.util.Arrays;
-
+import java.net.InetAddress;
 public class Client5{
 
     public DatagramSocket socket;
@@ -15,10 +15,18 @@ public class Client5{
     String servipstring;
  
     public Client5(int portSRC, String xxx) throws SocketException { // USAGE : Initialize and construct Client Socket. Provide port.
-        socket = new DatagramSocket(portSRC);
+        try{socket = new DatagramSocket(portSRC);
         msgcnt = 0;
         usms = 1;
         servipstring=xxx;
+        InetAddress tp = InetAddress.getLocalHost();
+        System.out.println("IP Address:- " + tp.getHostAddress());
+        System.out.println("Host Name:- " + tp.getHostName());}
+        catch(Exception e)
+        {
+            System.out.println("Client Constructor Fault.");
+        }
+
     }
 
 
@@ -51,7 +59,7 @@ public class Client5{
 
     //Scanner sc = new Scanner(System.in);
 
-    double thres = 0.7; //USAGE : Used to set fault percentage. 1 means no fault and 0 means total fault. Scale accordingly.
+    double thres = 0.8; //USAGE : Used to set fault percentage. 1 means no fault and 0 means total fault. Scale accordingly.
 
     try{
         //servip = InetAddress.getByName(xxx);
@@ -145,8 +153,8 @@ public class Client5{
     break;
     }
     System.out.println("RSNDCNT LOOP LEFT!");
-    if (rsndcnt == 4){
-        System.out.println("Communication failed after 4 attempts of receiving. Stop.");
+    if (rsndcnt == 20){
+        System.out.println("Communication failed after "+rsndcnt+" attempts of receiving. Stop.");
         return new byte[0];}
     else
         return buffstore;
