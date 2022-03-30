@@ -18,6 +18,13 @@ public class ClientInterface {
 		String address = sc.nextLine();
 		return address;
 	}
+	public int getClientID(){
+		System.out.println("Please enter the client ID you want to connect to:");
+		Scanner sc = new Scanner(System.in);
+		int clientID = sc.nextInt();
+		sc.nextLine();
+		return clientID;
+	}
 
 	public int startMenu() {
 		System.out.println("Thank you for using the DSB client");
@@ -291,7 +298,7 @@ public class ClientInterface {
 			System.out.println("Current balance is "+response.getAccountInfo().getCurrentBalance());
 		}
 		else {
-			System.out.println("Balance checking failed!");
+			System.out.println("Fund transfer failed!");
 			System.out.println("Error: "+response.getMessage());
 		}
 	}
