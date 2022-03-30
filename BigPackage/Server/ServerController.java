@@ -1,5 +1,6 @@
 package BigPackage.Server;
 
+import java.util.Arrays;
 
 public class ServerController {
 
@@ -75,7 +76,9 @@ public class ServerController {
 
             if (broadcastString != ""){
                 System.out.println("broadcast string is: " + broadcastString);
-                serverSocket.broadcastList(service.marshalBroadcastString(broadcastString));
+                byte[] broadcastBytes = service.marshalBroadcastString(broadcastString);
+                // System.out.println("broadcastBytes: " + Arrays.toString(broadcastBytes));
+                serverSocket.broadcastList(broadcastBytes);
             }
 
             Thread.sleep(100);

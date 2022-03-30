@@ -41,6 +41,10 @@ public class WrapperService {
         MarshUtil.marshShort((short)1, responseBuf, writeBufPt);
     }
 
+    void addSuccessResponseCode(byte[] extraBuf){
+        MarshUtil.marshShort((short)1, extraBuf, writeBufPt);
+    }
+
     public String openAccount() {     // TBD: exception types, exception content
         String broadcastString = "New account %d created";
 
@@ -132,7 +136,7 @@ public class WrapperService {
     public byte[] marshalBroadcastString(String broadcastString){
         byte[] result = new byte[2 + MarshUtil.getStringByteLen(broadcastString)];
         writeBufPt.at = 0;
-        addSuccessResponseCode();
+        addSuccessResponseCode(result);
         MarshUtil.marshString(broadcastString, result, writeBufPt);
         return result;
     }
