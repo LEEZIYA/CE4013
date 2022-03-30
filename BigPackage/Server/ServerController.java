@@ -50,7 +50,7 @@ public class ServerController {
                     case 3:
                         int monitorInterval = service.getMonitorInterval();
                         service.addSuccessResponseCode();
-                        // serverSocket.addList();
+                        serverSocket.addList(monitorInterval);
                         break;
                     case 4:
                         broadcastString = service.getAccountBalance();
@@ -75,7 +75,7 @@ public class ServerController {
 
             if (broadcastString != ""){
                 System.out.println("broadcast string is: " + broadcastString);
-                // serverSocket.broadcast(service.marshalBroadcastString(broadcastString));
+                serverSocket.broadcastList(service.marshalBroadcastString(broadcastString));
             }
 
             Thread.sleep(100);

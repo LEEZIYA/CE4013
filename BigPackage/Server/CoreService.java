@@ -22,7 +22,7 @@ public class CoreService {
     }
 
     public int openAccount(String name, char[] password, CurrencyType cType, float initialBalance) {
-        int accountNum = Math.abs(new Random().nextInt(10000));
+        int accountNum = 10000 + Math.abs(new Random().nextInt(90000));
         AccountInfo newAcc = new AccountInfo(name, password, cType, initialBalance, accountNum);
         accounts.add(newAcc);
         return accountNum;
@@ -63,6 +63,9 @@ public class CoreService {
         AccountInfo acc = getValidatedAccount(accountNum, name, password, cType);
 
         float newBalance = acc.getCurrentBalance() + change;
+        System.out.println("acc.getCurrentBalance(): " + acc.getCurrentBalance());
+        System.out.println("change: " + change);
+        System.out.println("newBalance: " + newBalance);
         if (newBalance < 0){
             throw new RequestException("Insufficient balance");
         }
