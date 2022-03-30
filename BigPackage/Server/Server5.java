@@ -21,7 +21,7 @@ public class Server5{
     InetAddress INA;
     int CP;
     byte[] oldmsg;
-    Subs[] Slist;
+    Subs Slist[];
     int Slistcnt;
 
 	private DatagramSocket socket;
@@ -207,56 +207,58 @@ public class Server5{
 
         Date date = new Date();
 
+        System.out.println("The size of broadcasting list is: "+Slistcnt);
+
         if(Slistcnt>-1)
         {
 
             System.out.println("Evaluating SUbs");
 
-        int[] arem = new int[Slistcnt+1];
-        int aremcnt = -1;
+            int[] arem = new int[Slistcnt+1];
+            int aremcnt = -1;
 
-        for(int i = 0; i<= Slistcnt;i++)
-        {
-            if(Slist[i].endTime>=date.getTime())
+            for(int i = 0; i<= Slistcnt;i++)
             {
-                serverMsgSendParam(bmsg, Slist[i].INA, Slist[i].port);
-            }
-            else
-            {
-                aremcnt++;
-                arem[aremcnt]=i;
-            }
-        }
-
-        //Dealing with removal.
-
-        int finalcnt = Slistcnt-aremcnt-1;
-        Subs[] nlist = new Subs[finalcnt+1];
-        int nlistcnt = -1;
-        int flg = 0;
-
-        for (int i = 0;i<=Slistcnt;i++)
-        {
-            for (int j = 0; j<=aremcnt;j++)
-            {
-                if(arem[j]==i)
+                if(Slist[i].endTime>=date.getTime())
                 {
-                    flg = 1;
-                    break;
+                    serverMsgSendParam(bmsg, Slist[i].INA, Slist[i].port);
+                }
+                else
+                {
+                    aremcnt++;
+                    arem[aremcnt]=i;
                 }
             }
-            
-            if(flg == 1)
+
+            //Dealing with removal.
+
+            int finalcnt = Slistcnt-aremcnt-1;
+            Subs[] nlist = new Subs[finalcnt+1];
+            int nlistcnt = -1;
+            int flg = 0;
+
+            for (int i = 0;i<=Slistcnt;i++)
             {
-                flg = 0;
-                break;
+                for (int j = 0; j<=aremcnt;j++)
+                {
+                    if(arem[j]==i)
+                    {
+                        flg = 1;
+                        break;
+                    }
+                }
+                
+                if(flg == 1)
+                {
+                    flg = 0;
+                    continue;
+                }
+                
+                nlistcnt++;
+                nlist[nlistcnt] = Slist[i];
             }
-            
-            nlistcnt++;
-            nlist[nlistcnt] = Slist[i];
-        }
-        Slist = nlist;
-        Slistcnt = nlistcnt;
+            Slist = nlist;
+            Slistcnt = nlistcnt;
 
         }
         else{
