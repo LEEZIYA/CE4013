@@ -29,6 +29,7 @@ public class WrapperService {
     }
 
     public void addFailureResponse(String errorMessage){
+        writeBufPt.at = 0;
         int dataByteCount = MarshUtil.getStringByteLen(errorMessage);
         responseBuf = new byte[2 + dataByteCount];
 
@@ -72,7 +73,7 @@ public class WrapperService {
     }
  
     public String changeBalance() throws RequestException{
-        String broadcastString = "Account %d updated balance by %f";
+        String broadcastString = "Account %d updated balance by %.2f";
 
         responseBuf = new byte[2 + 4];
         CurrencyType cType = MarshUtil.unmarshCType(requestData, readBufPt);
@@ -111,7 +112,7 @@ public class WrapperService {
     }
 
     public String transferFund() throws RequestException{
-        String broadcastString = "Account %d transferred %f to account %d";
+        String broadcastString = "Account %d transferred %.2f to account %d";
 
         responseBuf = new byte[2 + 4];
         CurrencyType cType = MarshUtil.unmarshCType(requestData, readBufPt);
@@ -130,6 +131,7 @@ public class WrapperService {
 
     public byte[] marshalBroadcastString(String broadcastString){
         byte[] result = new byte[MarshUtil.getStringByteLen(broadcastString)];
+        addSuccessResponseCode();
         MarshUtil.marshString(broadcastString, result, new BufferPointer());
         return result;
     }
