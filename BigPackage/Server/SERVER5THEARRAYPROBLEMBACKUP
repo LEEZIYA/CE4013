@@ -33,7 +33,7 @@ public class Server5{
         socket = new DatagramSocket(port);
         map = new int[1024][2];
         xx=-1;
-        Slist = new Subs[50];
+        Slist = new Subs[20];
         Slistcnt =  -1;
         System.out.println("Enter 1 for At Most Once Semantics else any other integer for At Least once: ");
         int x = sc.nextInt();
@@ -212,22 +212,54 @@ public class Server5{
         if(Slistcnt>-1)
         {
 
-            System.out.println("Evaluating Subs");
+            System.out.println("Evaluating SUbs");
 
-            Subs[] Nlist = new Subs[50];
-            int Nlistcnt = -1;
+            int[] arem = new int[Slistcnt+1];
+            int aremcnt = -1;
 
             for(int i = 0; i<= Slistcnt;i++)
             {
                 if(Slist[i].endTime>=date.getTime())
                 {
                     serverMsgSendParam(bmsg, Slist[i].INA, Slist[i].port);
-                    ++Nlistcnt;
-                    Nlist[Nlistcnt]=Slist[i];
+                }
+                else
+                {
+                    aremcnt++;
+                    arem[aremcnt]=i;
                 }
             }
-            Slist=Nlist;
-            Slistcnt=Nlistcnt;
+
+            //Dealing with removal.
+
+            int finalcnt = Slistcnt-aremcnt-1;
+            Subs[] nlist = new Subs[finalcnt+1];
+            int nlistcnt = -1;
+            int flg = 0;
+
+            for (int i = 0;i<=Slistcnt;i++)
+            {
+                for (int j = 0; j<=aremcnt;j++)
+                {
+                    if(arem[j]==i)
+                    {
+                        flg = 1;
+                        break;
+                    }
+                }
+                
+                if(flg == 1)
+                {
+                    flg = 0;
+                    continue;
+                }
+                
+                nlistcnt++;
+                nlist[nlistcnt] = Slist[i];
+            }
+            Slist = nlist;
+            Slistcnt = nlistcnt;
+
         }
         else{
            System.out.println("Broadcast list is empty.");
