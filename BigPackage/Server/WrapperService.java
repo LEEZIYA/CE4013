@@ -130,7 +130,7 @@ public class WrapperService {
     }
 
     public byte[] marshalBroadcastString(String broadcastString){
-        byte[] result = new byte[MarshUtil.getStringByteLen(broadcastString)];
+        byte[] result = new byte[2 + MarshUtil.getStringByteLen(broadcastString)];
         addSuccessResponseCode();
         MarshUtil.marshString(broadcastString, result, new BufferPointer());
         return result;
