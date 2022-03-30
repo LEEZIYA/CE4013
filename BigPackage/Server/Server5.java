@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.net.InetAddress;
 import javax.lang.model.util.ElementScanner14;
-
+import java.util.Scanner;
 import java.math.*;
 
 import BigPackage.BufferPointer;
@@ -29,11 +29,23 @@ public class Server5{
 	public Server5(int port) throws SocketException { // USAGE : Constructed once only per server run!
 
        try{ port = 40500;
+        Scanner sc = new Scanner(System.in);
         socket = new DatagramSocket(port);
         map = new int[1024][2];
         xx=-1;
         Slist = new Subs[20];
         Slistcnt =  -1;
+        System.out.println("Enter 1 for At Most Once Semantics else any other integer for At Least once: ");
+        int x = sc.nextInt();
+        if(x==1)
+            {
+                ATMOSTFLAG = true;System.out.println("At Most Once Mode Activated.");
+            }
+        else
+            {
+                ATMOSTFLAG = false; System.out.println("At least once Mode Activated.");
+            }
+
         InetAddress tp = InetAddress.getLocalHost();
         System.out.println("IP Address:- " + tp.getHostAddress());
         System.out.println("Host Name:- " + tp.getHostName());}
