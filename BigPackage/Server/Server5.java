@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.net.InetAddress;
 import java.util.Scanner;
-import java.math.*;
-
 import BigPackage.BufferPointer;
 import BigPackage.MarshUtil;
 
@@ -25,9 +23,9 @@ public class Server5{
 
 	private DatagramSocket socket;
  
-	public Server5(int port) throws SocketException { // USAGE : Constructed once only per server run!
-
+	public Server5(int port) throws SocketException { // USAGE : Constructed once only per server run. Need to provide user port.
        try{ port = 40500;
+        System.out.println("The default port of "+port+" is being used. Please change coding and send required port through constructor if needed.");
         Scanner sc = new Scanner(System.in);
         socket = new DatagramSocket(port);
         map = new int[1024][2];
@@ -55,7 +53,6 @@ public class Server5{
     }
 
 	public byte[] serverMsgWait() { //USAGE : Used to receive a byte buffer and takes care of duplicates.
-
         try {
             return serviceReceive();
         } catch (SocketException ex) {
@@ -66,7 +63,7 @@ public class Server5{
         return null;
     }
 
-	private byte[] serviceReceive() throws IOException {
+	private byte[] serviceReceive() throws IOException {//Extension called method for the waiting function by server.
 
         int retflg = 0;
 
@@ -85,19 +82,9 @@ public class Server5{
                     break;
             }}
 
-            //DEBUGERY System.out.println("Request received.");
-
-            //Demystifying MSG for at Most Once Semantics.
-
-           // byte[] UID = Arrays.copyOfRange(buffermax,0,4);
-
-          // System.out.println("Numbered Bytes: "+Arrays.toString(buffermax));
-
             byte[] USMS = Arrays.copyOfRange(buffermax,0,4);
             byte[] MID = Arrays.copyOfRange(buffermax,4,8);
             buffermax = Arrays.copyOfRange(buffermax,8,buffermax.length);
-
-           // System.out.println("Non-Numbered Bytes: "+Arrays.toString(buffermax));
 
             int UidID = MarshUtil.unmarshInt(USMS, new BufferPointer());
             int MsgID = MarshUtil.unmarshInt(MID, new BufferPointer());
@@ -125,42 +112,8 @@ public class Server5{
             INA = request.getAddress();
             CP = request.getPort();
 
-           //DEBUGERY  System.out.println(INA);
-           //DEBUGERY  System.out.println(CP);
-
-            //String reqdata = new String(buffermax, 0, request.getLength());
-
-           // System.out.println("Request: "+reqdata);
-
             return buffermax;
 
-            /**byte[] buffer;
-
-            if(reqdata.equals("New Account"))
-            {
-                String quote = "Your new account is ready!";buffer = quote.getBytes();
-            }
-            else if(reqdata.equals("Deposit"))
-            {
-                String quote = "Your deposit was successful!";buffer = quote.getBytes();
-            }
-            else if(reqdata.equals("Closing"))
-            {
-                String quote = "Thanks for banking with us Mr. Loyal Customer. Bye bye!";buffer = quote.getBytes();
-            }
-            else{
-                String quote = "Re try maybe with another input.";buffer = quote.getBytes();
-            }
-
-
- 
-            InetAddress clientAddress = request.getAddress();
-            int clientPort = request.getPort();
- 
-            DatagramPacket response = new DatagramPacket(buffer, buffer.length, clientAddress, clientPort);
-            //socket.send(response);
-            System.out.println("Answer NOT REALLLY sent. \n");
-            **/
         }
     }
 
@@ -169,9 +122,6 @@ public class Server5{
         oldmsg = a;
         DatagramPacket response = new DatagramPacket(a, a.length, INA, CP);
         socket.send(response);
-       //DEBUGERY  System.out.println("HERE IS THE FINAL SENDING:");
-       //DEBUGERY  System.out.println(Arrays.toString(a));
-       //DEBUGERY  System.out.println("Answer sent. \n");
             
     }
 
@@ -180,27 +130,22 @@ public class Server5{
         try{
         DatagramPacket response = new DatagramPacket(a, a.length, b, c);
         socket.send(response);
-      //DEBUGERY   System.out.println("HERE IS THE SUB FINAL SENDING:");
-       //DEBUGERY  System.out.println(Arrays.toString(a));
-       //DEBUGERY  System.out.println("Answer sent. \n");
         }
         catch(Exception e)
         {
             System.out.println("Exception occurs at serverMsgSendParam");
         }
-
-            
     }
 
     public void addList(long millitime){
-        //DEBUGERY System.out.println("Starting the ADDLIST PROTOCOL");
         Slistcnt++;
         Slist[Slistcnt]= new Subs(INA,CP,millitime);
-        System.out.println("Added new SUB.");
+        System.out.println("Added new Sub:");
+        System.out.println("IP: "+INA);
+        System.out.println("Client Port: "+CP);
         System.out.println("StartTime: "+Slist[Slistcnt].startTime);
         System.out.println("IntervalTime: "+Slist[Slistcnt].intervalTime);
         System.out.println("EndTime: "+Slist[Slistcnt].endTime);
-       //DEBUGERY  System.out.println("Something was added to SUBS.");
     }
 
     public void broadcastList(byte[] bmsg){
@@ -211,9 +156,6 @@ public class Server5{
 
         if(Slistcnt>-1)
         {
-
-          //DEBUGERY   System.out.println("Evaluating Subs");
-
             Subs[] Nlist = new Subs[50];
             int Nlistcnt = -1;
 
@@ -233,7 +175,6 @@ public class Server5{
            System.out.println("Broadcast list is empty.");
         }
     }
-
 }
 
 
