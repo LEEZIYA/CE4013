@@ -2,6 +2,9 @@ package BigPackage.Server;
 import java.io.*;
 import java.net.*;
 import java.util.Arrays;
+
+import javax.lang.model.util.ElementScanner14;
+
 import java.math.*;
 
 import BigPackage.BufferPointer;
@@ -15,6 +18,8 @@ public class Server5{
     InetAddress INA;
     int CP;
     byte[] oldmsg;
+    Subs[] Slist;
+    int Slistcnt;
 
 	private DatagramSocket socket;
  
@@ -24,6 +29,8 @@ public class Server5{
         socket = new DatagramSocket(port);
         map = new int[512][512];
         xx=-1;
+        Slist = new Subs[20];
+        Slistcnt =  -1;
     }
 
 	public byte[] serverMsgWait() { //USAGE : Used to receive a byte buffer and takes care of duplicates.
@@ -137,8 +144,90 @@ public class Server5{
         socket.send(response);
         System.out.println("HERE IS THE FINAL SENDING:");
         System.out.println(Arrays.toString(a));
-        System.out.println("Answer NOT REALLLY sent. \n");
+        System.out.println("Answer sent. \n");
             
+    }
+
+    public void serverMsgSendParam(byte[] a, InetAddress b, int c){ //Used by sending function - broadcastList.
+ 
+        try{
+        DatagramPacket response = new DatagramPacket(a, a.length, b, c);
+        socket.send(response);
+        System.out.println("HERE IS THE SUB FINAL SENDING:");
+        System.out.println(Arrays.toString(a));
+        System.out.println("Answer sent. \n");}
+        catch(Exception e)
+        {
+            System.out.println("Exception occurs at serverMsgSendParam");
+        }
+
+            
+    }
+
+    public void addList(long millitime){
+        Slistcnt++;
+        Slist[Slistcnt]= new Subs(INA,CP,millitime);
+        System.out.println("Added new SUB.");
+        System.out.println("StartTime: "+Slist[Slistcnt].startTime);
+        System.out.println("IntervalTime: "+Slist[Slistcnt].intervalTime);
+        System.out.println("EndTime: "+Slist[Slistcnt].endTime);
+    }
+
+    public void broadcastList(byte[] bmsg){
+
+        if(Slistcnt>-1)
+        {
+
+        int[] arem = new int[Slistcnt+1];
+        int aremcnt = -1;
+
+        for(int i = 0; i<= Slistcnt;i++)
+        {
+            if((Slist[i].startTime+Slist[i].intervalTime)<=Slist[i].endTime)
+            {
+                serverMsgSendParam(bmsg, Slist[i].INA, Slist[i].port);
+            }
+            else
+            {
+                aremcnt++;
+                arem[aremcnt]=i;
+            }
+        }
+
+        //Dealing with removal.
+
+        int finalcnt = Slistcnt-aremcnt-1;
+        Subs[] nlist = new Subs[finalcnt+1];
+        int nlistcnt = -1;
+        int flg = 0;
+
+        for (int i = 0;i<=Slistcnt;i++)
+        {
+            for (int j = 0; j<=aremcnt;j++)
+            {
+                if(arem[j]==i)
+                {
+                    flg = 1;
+                    break;
+                }
+            }
+            
+            if(flg == 1)
+            {
+                flg = 0;
+                break;
+            }
+            
+            nlistcnt++;
+            nlist[nlistcnt] = Slist[i];
+        }
+        Slist = nlist;
+        Slistcnt = nlistcnt;
+
+        }
+        else{
+           System.out.println("Broadcast list is empty.");
+        }
     }
 
 }
