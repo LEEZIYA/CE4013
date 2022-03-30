@@ -29,7 +29,7 @@ public class Server5{
 
         port = 40500;
         socket = new DatagramSocket(port);
-        map = new int[512][512];
+        map = new int[1024][2];
         xx=-1;
         Slist = new Subs[20];
         Slistcnt =  -1;
@@ -88,7 +88,7 @@ public class Server5{
 
                         for(int i = 0; i<=xx;i++)
                         {
-                            if(MsgID==map[i][i])
+                            if((UidID==map[i][0])&&(MsgID==map[i][1]))
                                 retflg = 1;
                         }
                         if (retflg==1){
@@ -98,7 +98,8 @@ public class Server5{
                         }
             
                         xx++;
-                        map[xx][xx]=MsgID;
+                        map[xx][0] = UidID;
+                        map[xx][1] = MsgID;
                         System.out.println("New Message Created.");
                     }
 
