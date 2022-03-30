@@ -2,6 +2,7 @@ package BigPackage.Server;
 import java.io.*;
 import java.net.*;
 import java.util.Arrays;
+import java.util.Date;
 
 import javax.lang.model.util.ElementScanner14;
 
@@ -183,6 +184,8 @@ public class Server5{
 
     public void broadcastList(byte[] bmsg){
 
+        Date date = new Date();
+
         if(Slistcnt>-1)
         {
 
@@ -191,7 +194,7 @@ public class Server5{
 
         for(int i = 0; i<= Slistcnt;i++)
         {
-            if((Slist[i].startTime+Slist[i].intervalTime)<=Slist[i].endTime)
+            if(Slist[i].endTime>=date.getTime())
             {
                 serverMsgSendParam(bmsg, Slist[i].INA, Slist[i].port);
             }
