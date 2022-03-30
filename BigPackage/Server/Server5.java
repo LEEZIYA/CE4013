@@ -80,13 +80,13 @@ public class Server5{
 
            // byte[] UID = Arrays.copyOfRange(buffermax,0,4);
 
-           System.out.println("Numbered Bytes: "+Arrays.toString(buffermax));
+          // System.out.println("Numbered Bytes: "+Arrays.toString(buffermax));
 
             byte[] USMS = Arrays.copyOfRange(buffermax,0,4);
             byte[] MID = Arrays.copyOfRange(buffermax,4,8);
             buffermax = Arrays.copyOfRange(buffermax,8,buffermax.length);
 
-            System.out.println("Non-Numbered Bytes: "+Arrays.toString(buffermax));
+           // System.out.println("Non-Numbered Bytes: "+Arrays.toString(buffermax));
 
             int UidID = MarshUtil.unmarshInt(USMS, new BufferPointer());
             int MsgID = MarshUtil.unmarshInt(MID, new BufferPointer());
@@ -181,12 +181,14 @@ public class Server5{
     }
 
     public void addList(long millitime){
+        System.out.println("Starting the ADDLIST PROTOCOL");
         Slistcnt++;
         Slist[Slistcnt]= new Subs(INA,CP,millitime);
         System.out.println("Added new SUB.");
         System.out.println("StartTime: "+Slist[Slistcnt].startTime);
         System.out.println("IntervalTime: "+Slist[Slistcnt].intervalTime);
         System.out.println("EndTime: "+Slist[Slistcnt].endTime);
+        System.out.println("Something was added to SUBS.");
     }
 
     public void broadcastList(byte[] bmsg){
@@ -195,6 +197,8 @@ public class Server5{
 
         if(Slistcnt>-1)
         {
+
+            System.out.println("Evaluating SUbs");
 
         int[] arem = new int[Slistcnt+1];
         int aremcnt = -1;

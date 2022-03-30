@@ -78,7 +78,7 @@ public class Client5{
 
             //ADDING MSGCNT per sent request.
             
-            System.out.println("Non-Numbered Bytes: "+Arrays.toString(bufferino));
+           // System.out.println("Non-Numbered Bytes: "+Arrays.toString(bufferino));
 
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             //out.write((byte)UseID);
@@ -93,7 +93,7 @@ public class Client5{
             out.write(bufferino);
             byte[] buffermax = out.toByteArray();
 
-            System.out.println("Numbered Bytes: "+Arrays.toString(buffermax));
+          //  System.out.println("Numbered Bytes: "+Arrays.toString(buffermax));
 
 
 
@@ -211,7 +211,7 @@ public void startMonitor(byte[] b){ //USAGE : Used to send message of byte refer
 
          //ADDING MSGCNT per sent request.
          
-         System.out.println("Non-Numbered Bytes: "+Arrays.toString(bufferino));
+        // System.out.println("Non-Numbered Bytes: "+Arrays.toString(bufferino));
 
          ByteArrayOutputStream out = new ByteArrayOutputStream();
          //out.write((byte)UseID);
@@ -226,7 +226,7 @@ public void startMonitor(byte[] b){ //USAGE : Used to send message of byte refer
          out.write(bufferino);
          byte[] buffermax = out.toByteArray();
 
-         System.out.println("Numbered Bytes: "+Arrays.toString(buffermax));
+        // System.out.println("Numbered Bytes: "+Arrays.toString(buffermax));
 
 
 
