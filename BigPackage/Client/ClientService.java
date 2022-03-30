@@ -10,9 +10,9 @@ public class ClientService {
 	//private int monitorTimeMilli;
 	private long monitorEnd;
 
-	public ClientService(){
+	public ClientService(int port,String ipaddress){
 		try{
-			udpClient = new Client5(40000); //port 17
+			udpClient = new Client5(port,ipaddress); //port 40000
 		} catch (Exception e){
 			System.out.println("error initializing client socket! please restart" + e);
 		}
