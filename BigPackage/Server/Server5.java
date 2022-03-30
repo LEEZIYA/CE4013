@@ -12,6 +12,8 @@ import BigPackage.MarshUtil;
 
 public class Server5{
 
+    boolean ATMOSTFLAG = true; //USAGE: 1 for At Most Semantics. 0 for At Least Semantics.
+
     double thres = 1; //USAGE : Setting success percentage.
     int map[][];
     int xx;
@@ -81,19 +83,24 @@ public class Server5{
             int UidID = MarshUtil.unmarshInt(USMS, new BufferPointer());
             int MsgID = MarshUtil.unmarshInt(MID, new BufferPointer());
 
-            for(int i = 0; i<=xx;i++)
-            {
-                if(MsgID==map[i][i])
-                    retflg = 1;
-            }
-            if (retflg==1){
-                retflg = 0;
-                serverMsgSend(oldmsg);
-                continue;
-            }
-            xx++;
-            map[xx][xx]=MsgID;
-            System.out.println("New Message Created.");
+
+            if(ATMOSTFLAG=true){
+
+                        for(int i = 0; i<=xx;i++)
+                        {
+                            if(MsgID==map[i][i])
+                                retflg = 1;
+                        }
+                        if (retflg==1){
+                            retflg = 0;
+                            serverMsgSend(oldmsg);
+                            continue;
+                        }
+            
+                        xx++;
+                        map[xx][xx]=MsgID;
+                        System.out.println("New Message Created.");
+                    }
 
             INA = request.getAddress();
             CP = request.getPort();
