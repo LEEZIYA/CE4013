@@ -247,7 +247,14 @@ public class ClientInterface {
 	}
 
 	public void monitoringResult(Response response){
-		System.out.println(response.getMessage());
+		if(!response.isSuccess()){ // check whether interval is finished
+			System.out.println("Monitoring finished");
+			 //informed by server that monitor interval over, stop monitoring
+		}
+		else{
+			System.out.println(response.getMessage()); //print out response
+		}
+		
 		//do we just compose message at server side, or do we need proceesing of accountInfo field?
 	}
 
