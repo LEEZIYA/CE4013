@@ -61,10 +61,10 @@ public class Server5{
             while(true)
             {
                 socket.receive(request);
-                System.out.println("HELLO");
                 if(Math.random()<thres)
+                {   System.out.println("Simulated Fault.");
                     break;
-            }
+            }}
 
             System.out.println("Request received.");
 
