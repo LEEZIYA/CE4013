@@ -49,8 +49,8 @@ public class ServerController {
                         break;
                     case 3:
                         int monitorInterval = service.getMonitorInterval();
-                        service.addSuccessResponseCode();
                         serverSocket.addList((long)monitorInterval);
+                        service.addSuccessResponseCode();
                         break;
                     case 4:
                         broadcastString = service.getAccountBalance();
