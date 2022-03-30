@@ -12,14 +12,14 @@ public class Client5{
     public int msgcnt;
     public int usms;
     public byte[] buffstore;
+    String servipstring;
  
-    public Client5(int portSRC) throws SocketException { // USAGE : Initialize and construct Client Socket. Provide port.
+    public Client5(int portSRC, String xxx) throws SocketException { // USAGE : Initialize and construct Client Socket. Provide port.
         socket = new DatagramSocket(portSRC);
         msgcnt = 0;
         usms = 1;
+        servipstring=xxx;
     }
-
-
 
 
 
@@ -54,8 +54,11 @@ public class Client5{
     double thres = 0.7; //USAGE : Used to set fault percentage. 1 means no fault and 0 means total fault. Scale accordingly.
 
     try{
-        InetAddress address = InetAddress.getByName(hostname);
+        //servip = InetAddress.getByName(xxx);
+        InetAddress address = InetAddress.getByName(servipstring);
+       // InetAddress address = InetAddress.getByName(hostname);
         //DatagramSocket socket = new DatagramSocket();
+        //servip = InetAddress.getByName(xxx);
         socket.setSoTimeout(5000);
 
         System.out.println("Connection protocol initialized.");
@@ -97,9 +100,9 @@ public class Client5{
             while(true)
             {
                 socket.receive(response);
-                System.out.println("HELLO MR. ERROR LOOP!");
-                if(Math.random()<thres)
-                    break;
+                if(Math.random()<thres){
+                    System.out.println("Simulated fault.");
+                    break;}
             }
 
             System.out.println("Answer received. \n");
