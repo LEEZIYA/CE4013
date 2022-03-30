@@ -14,10 +14,10 @@ public class Client5{
     public byte[] buffstore;
     String servipstring;
  
-    public Client5(int portSRC, String xxx) throws SocketException { // USAGE : Initialize and construct Client Socket. Provide port.
+    public Client5(int portSRC, String xxx, int sesd) throws SocketException { // USAGE : Initialize and construct Client Socket. Provide port.
         try{socket = new DatagramSocket(portSRC);
         msgcnt = 0;
-        usms = 1;
+        usms = sesd;
         servipstring=xxx;
         InetAddress tp = InetAddress.getLocalHost();
         System.out.println("IP Address:- " + tp.getHostAddress());
@@ -286,8 +286,8 @@ public void startMonitor(byte[] b){ //USAGE : Used to send message of byte refer
  break;
  }
  System.out.println("RSNDCNT LOOP LEFT!");
- if (rsndcnt == 4){
-     System.out.println("Subscription failed after 4 attempts of receiving. Stop.");}
+ if (rsndcnt == 20){
+     System.out.println("Subscription failed after 20 attempts of receiving. Stop.");}
  else
      System.out.println("Subscription Successful");
 }
