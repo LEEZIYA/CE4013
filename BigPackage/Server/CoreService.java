@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
+import BigPackage.AccountInfo;
 import BigPackage.CurrencyType;
-import BigPackage.Client.AccountInfo;
 
 public class CoreService {
 

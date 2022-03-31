@@ -1,6 +1,4 @@
-package BigPackage.Client;
-
-import BigPackage.CurrencyType;
+package BigPackage;
 
 public class AccountInfo {
 	private String name;

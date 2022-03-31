@@ -1,5 +1,7 @@
 package BigPackage.Client;
 
+import BigPackage.AccountInfo;
+
 public class Response {
 	private String Message;
 	private boolean Success;
