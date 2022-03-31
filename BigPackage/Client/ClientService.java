@@ -13,7 +13,7 @@ public class ClientService {
 
 	public ClientService(int port,String ipaddress,int clientID){
 		try{
-			udpClient = new Client5(port,ipaddress,clientID); //port 40000
+			udpClient = new Client5(port,ipaddress,clientID); //e.g. port 40000
 		} catch (Exception e){
 			System.out.println("error initializing client socket! please restart" + e);
 		}
@@ -34,8 +34,8 @@ public class ClientService {
 
 		byte[] message = messageBuffer.toByte();
 		
-		byte[] reply = udpClient.sendMSG(message); //Byte reply is where the reply from the server. This placehodler includes waiting.
-		//blocking wait for reponse?
+		byte[] reply = udpClient.sendMSG(message); //Byte returned is the reply from the server. 
+		//blocking wait for reponse
 		
 		Response response = new Response(); 
 
@@ -68,7 +68,7 @@ public class ClientService {
 		byte[] message = messageBuffer.toByte();
 		
 		byte[] reply = udpClient.sendMSG(message);
-		//blocking wait for reponse?
+		//blocking wait for reponse
 		Response response = new Response(); 
 
 		MarshBuffer replyBuffer = new MarshBuffer(reply);
@@ -97,7 +97,7 @@ public class ClientService {
 		byte[] message = messageBuffer.toByte();
 		
 		byte[] reply = udpClient.sendMSG(message);
-		//blocking wait for reponse?
+		//blocking wait for response
 		Response response = new Response(); 
 
 		MarshBuffer replyBuffer = new MarshBuffer(reply);
@@ -160,7 +160,6 @@ public class ClientService {
 	public void subscribeForUpdate(int monitorInterval){
 		MarshBuffer messageBuffer = new MarshBuffer(2+4);
 		messageBuffer.marshShort((short)3); //requestType
-		//this.monitorTimeMilli = monitorInterval*60*1000;
 		messageBuffer.marshInt(monitorInterval*60*1000);
 
 		byte[] message = messageBuffer.toByte();
@@ -173,13 +172,7 @@ public class ClientService {
 
 	//blocking wait for message from server
 	public Response getUpdate() {
-		// marshalling
-		// MarshBuffer messageBuffer = new MarshBuffer(2+4);
-		// messageBuffer.marshShort((short)3); //requestType
 
-		// //messageBuffer.marshInt(monitorInterval);
-
-		// byte[] message = messageBuffer.toByte();
 		int remainingTime = (int)(this.monitorEnd - System.currentTimeMillis());
 		
 		byte[] reply = udpClient.listenMonitor(remainingTime);
@@ -222,7 +215,6 @@ public class ClientService {
 		response.setSuccess(success);
 		
 		if(success){
-			// response.setMessage("Account created successfully");
 			Float currentBalance = replyBuffer.unmarshFloat();
 			AccountInfo account = new AccountInfo();
 			account.setCurrentBalance(currentBalance);
@@ -259,7 +251,6 @@ public class ClientService {
 		response.setSuccess(success);
 		
 		if(success){
-			// response.setMessage("Account created successfully");
 			Float currentBalance = replyBuffer.unmarshFloat();
 			AccountInfo account = new AccountInfo();
 			account.setCurrentBalance(currentBalance);

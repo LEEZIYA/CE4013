@@ -80,7 +80,7 @@ public class ClientController {
 		int monitorInterval;
 		monitorInterval = this.clientUI.monitorUpdate();
 		this.clientService.subscribeForUpdate(monitorInterval);// Minutes.
-		//need to make this non-blocking?
+		//this is non-blocking
 		while(true){
 			//blocking wait for update
 			Response response = this.clientService.getUpdate();
