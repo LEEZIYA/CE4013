@@ -2,6 +2,7 @@ package BigPackage.Client;
 import java.io.*;
 import java.net.*;
 import java.net.InetAddress;
+import java.util.Scanner;
 
 public class Client5{
 
@@ -11,16 +12,22 @@ public class Client5{
     public int usms;
     public byte[] buffstore;
     public String servipstring;
+    public double thres;
+    public int rlim;
  
     public Client5(int portSRC, String xyz, int sesd) throws SocketException { // USAGE : Initialize and construct Client Socket. Provide port, IP and session ID during construction.
         try{
+            Scanner sc = new Scanner(System.in);
             socket = new DatagramSocket(portSRC);
             msgcnt = 0;
             usms = sesd;
+            rlim = 20;
             servipstring=xyz;
             InetAddress tp = InetAddress.getLocalHost();
             System.out.println("IP Address:- " + tp.getHostAddress());
             System.out.println("Host Name:- " + tp.getHostName());
+            System.out.println("Please enter the success rate of receiving communications (To be edited for fault tolerance measures). Choose a value BETWEEN 0.00 (0% Success) and 1.00 (100% success): ");
+            thres = sc.nextDouble();
         }
         catch(Exception e)
         {
@@ -35,12 +42,10 @@ public class Client5{
         int rsndcnt = 1;
         int rsndflg = 0;
         msgcnt++;
-        int rlim = 20;
 
         while(rsndcnt<=rlim)
         {
             int port = 40500;
-            double thres = 0.8;//USAGE : Used to set fault tolerance. The value between 0 and 1 sets the success rate. (1 Means 100% successful and anything less down to 0 or 0% success.)
             try{
                 InetAddress address = InetAddress.getByName(servipstring);
                 socket.setSoTimeout(5000);
@@ -70,14 +75,15 @@ public class Client5{
                     {
                         socket.receive(response);
                         if(Math.random()<thres){
-                            System.out.println("Simulated fault.");
                             break;}
+                        else
+                            System.out.println("Simulated fault.");
                     }
 
                     buffstore = buffer;
 
         } catch (SocketTimeoutException ex) {
-            System.out.println("Timeout error " +rlim);
+            System.out.println("Timeout error " +rsndcnt);
             rsndflg=1;
             rsndcnt++;  
         } catch (IOException ex) {
@@ -108,12 +114,10 @@ public void startMonitor(byte[] b){ //USAGE : Used to send message of byte refer
     int rsndflg = 0;
     msgcnt++;
 
-    while(rsndcnt<4)
+    while(rsndcnt<rlim)
     {
     
     int port = 40500; //USAGE : Server Port.
-
-    double thres = 0.8; //USAGE : Used to set fault percentage. 1 means no fault and 0 means total fault. Scale accordingly.
 
     try{
         InetAddress address = InetAddress.getByName(servipstring);
@@ -146,12 +150,14 @@ public void startMonitor(byte[] b){ //USAGE : Used to send message of byte refer
             socket.receive(response);
             if(Math.random()<thres)
                 break;
+            else
+                System.out.println("Simulated Fault.");
         }
 
         buffstore = buffer;
 
     } catch (SocketTimeoutException ex) {
-        System.out.println("Timeout error " +msgcnt);
+        System.out.println("Timeout error " +rsndcnt);
         rsndflg=1;
         rsndcnt++;  
     } catch (IOException ex) {
@@ -166,8 +172,8 @@ public void startMonitor(byte[] b){ //USAGE : Used to send message of byte refer
 
     break;
     }
-    if (rsndcnt == 20){
-        System.out.println("Subscription failed after 20 attempts of receiving. Stop.");}
+    if (rsndcnt == rlim){
+        System.out.println("Subscription failed after "+rlim+" attempts of receiving. Stop.");}
     else
         {System.out.println("Subscription Successful");}
     }

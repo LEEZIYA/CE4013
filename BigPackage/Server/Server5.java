@@ -12,7 +12,7 @@ public class Server5{
 
     boolean ATMOSTFLAG = true; //USAGE: 1 for At Most Semantics. 0 for At Least Semantics.
 
-    double thres = 0.8; //USAGE : Setting success percentage.
+    double thres = 1; //USAGE : Setting success percentage.
     int map[][];
     int xx;
     InetAddress INA;
@@ -25,7 +25,7 @@ public class Server5{
  
 	public Server5(int port) throws SocketException { // USAGE : Constructed once only per server run. Need to provide user port.
        try{ port = 40500;
-        System.out.println("The default port of "+port+" is being used. Please change coding and send required port through constructor if needed.");
+        System.out.println("The default port of "+port+" is was chosen by the creators. IF YOU NEED TO - Please change coding and send required port through constructor.");
         Scanner sc = new Scanner(System.in);
         socket = new DatagramSocket(port);
         map = new int[1024][2];
@@ -45,7 +45,12 @@ public class Server5{
 
         InetAddress tp = InetAddress.getLocalHost();
         System.out.println("IP Address:- " + tp.getHostAddress());
-        System.out.println("Host Name:- " + tp.getHostName());}
+        System.out.println("Host Name:- " + tp.getHostName());
+        
+        System.out.println("Please enter the success rate of receiving communications (To be edited for fault tolerance measures). Choose a value BETWEEN 0.00 (0% Success) and 1.00 (100% success): ");
+        thres = sc.nextDouble();
+
+        }
         catch(Exception e)
         {
             System.out.println("Client Constructor Fault.");
@@ -78,9 +83,12 @@ public class Server5{
             {
                 socket.receive(request);
                 if(Math.random()<thres)
-                {   System.out.println("Simulated Fault.");
+                {   
                     break;
-            }}
+                }
+                else
+                    System.out.println("Simulated Fault.");
+            }
 
             byte[] USMS = Arrays.copyOfRange(buffermax,0,4);
             byte[] MID = Arrays.copyOfRange(buffermax,4,8);
