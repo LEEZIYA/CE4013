@@ -35,8 +35,9 @@ public class Client5{
         int rsndcnt = 1;
         int rsndflg = 0;
         msgcnt++;
+        int rlim = 20;
 
-        while(rsndcnt<4)
+        while(rsndcnt<=rlim)
         {
             int port = 40500;
             double thres = 0.8;//USAGE : Used to set fault tolerance. The value between 0 and 1 sets the success rate. (1 Means 100% successful and anything less down to 0 or 0% success.)
@@ -59,7 +60,8 @@ public class Client5{
                     DatagramPacket request = new DatagramPacket(buffermax,buffermax.length,address,port);
                     socket.send(request);
 
-                    System.out.println("Request sent. Request ID for given user: "+msgcnt);
+                    if(rsndcnt == 0){
+                    System.out.println("Request sent. Request ID for given user: "+msgcnt);}
 
                     byte[] buffer = new byte[512];
                     DatagramPacket response = new DatagramPacket(buffer, buffer.length);
@@ -75,7 +77,7 @@ public class Client5{
                     buffstore = buffer;
 
         } catch (SocketTimeoutException ex) {
-            System.out.println("Timeout error " +msgcnt);
+            System.out.println("Timeout error " +rlim);
             rsndflg=1;
             rsndcnt++;  
         } catch (IOException ex) {
@@ -91,7 +93,7 @@ public class Client5{
 
     break;
     }
-    if (rsndcnt == 20){
+    if (rsndcnt == rlim){
         System.out.println("Communication failed after "+rsndcnt+" attempts of receiving. Stop.");
         return new byte[0];}
     else
@@ -182,17 +184,26 @@ public byte[] listenMonitor(int milli)//Listen for subscription calls for the gi
         return buffer;}
         catch (SocketTimeoutException ex) {
             System.out.println("Subscription Elapsed.");
-            return new byte[0];
+            byte[] b = new byte[2];
+            b[0]= (byte)0;
+            b[1]= (byte)0;
+            return b;
         } 
         catch(SocketException SEMILLI)
         {
             System.out.println("Subscription Elapsed.");
-            return new byte[0];
+            byte[] b = new byte[2];
+            b[0]= (byte)0;
+            b[1]= (byte)0;
+            return b;
         }
         catch (IOException ex) {
             System.out.println("Client error: " + ex.getMessage());
             ex.printStackTrace();
-            return new byte[0];
+            byte[] b = new byte[2];
+            b[0]= (byte)0;
+            b[1]= (byte)0;
+            return b;
         } 
 
     }

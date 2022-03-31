@@ -150,9 +150,12 @@ public class Server5{
 
     public void broadcastList(byte[] bmsg){
 
+        boolean cnttrk = false;
+        int cnttrkno = 0;
+
         Date date = new Date();
 
-        System.out.println("The size of broadcasting list is: "+Slistcnt);
+        System.out.println("The number of broadcast subscribers before monitor interval checking is: "+(Slistcnt+1));
 
         if(Slistcnt>-1)
         {
@@ -163,6 +166,8 @@ public class Server5{
             {
                 if(Slist[i].endTime>=date.getTime())
                 {
+                    cnttrk = true;
+                    cnttrkno++;
                     serverMsgSendParam(bmsg, Slist[i].INA, Slist[i].port);
                     ++Nlistcnt;
                     Nlist[Nlistcnt]=Slist[i];
@@ -170,6 +175,14 @@ public class Server5{
             }
             Slist=Nlist;
             Slistcnt=Nlistcnt;
+        if(!cnttrk)
+        {
+            System.out.println("After refreshing monitor intervals, no active subscribers were found. No updates were broadcasted.");
+        }
+        else
+        {
+            System.out.println("Number of subscribers who were messaged: "+cnttrkno);
+        }
         }
         else{
            System.out.println("Broadcast list is empty.");
