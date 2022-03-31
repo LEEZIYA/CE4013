@@ -45,13 +45,13 @@ public class WrapperService {
         MarshUtil.marshShort((short)1, extraBuf, writeBufPt);
     }
 
-    public String openAccount() {     // TBD: exception types, exception content
+    public String openAccount() {
         String broadcastString = "New account %d created";
 
         responseBuf = new byte[2 + 4];
         CurrencyType cType = MarshUtil.unmarshCType(requestData, readBufPt);
         float initialBalance = MarshUtil.unmarshFloat(requestData, readBufPt);
-        char[] password = MarshUtil.unmarshCharArray(requestData, 8, readBufPt);        // TBD: length of password
+        char[] password = MarshUtil.unmarshCharArray(requestData, 8, readBufPt);
         String name = MarshUtil.unmarshString(requestData, readBufPt);
 
         int returnValue = coreService.openAccount(name, password, cType, initialBalance);

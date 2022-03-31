@@ -24,28 +24,29 @@ public class Server5{
 	private DatagramSocket socket;
  
 	public Server5(int port) throws SocketException { // USAGE : Constructed once only per server run. Need to provide user port.
-       try{ port = 40500;
-        System.out.println("The default port of "+port+" is being used. Please change coding and send required port through constructor if needed.");
-        Scanner sc = new Scanner(System.in);
-        socket = new DatagramSocket(port);
-        map = new int[1024][2];
-        xx=-1;
-        Slist = new Subs[50];
-        Slistcnt =  -1;
-        System.out.println("Enter 1 for At Most Once Semantics else any other integer for At Least once: ");
-        int x = sc.nextInt();
-        if(x==1)
-            {
-                ATMOSTFLAG = true;System.out.println("At Most Once Mode Activated.");
-            }
-        else
-            {
-                ATMOSTFLAG = false; System.out.println("At least once Mode Activated.");
-            }
+        try{ 
+            port = 40500;
+            System.out.println("The default port of "+port+" is being used. Please change coding and send required port through constructor if needed.");
+            Scanner sc = new Scanner(System.in);
+            socket = new DatagramSocket(port);
+            map = new int[1024][2];
+            xx=-1;
+            Slist = new Subs[50];
+            Slistcnt =  -1;
+            System.out.println("Enter 1 for At Most Once Semantics else any other integer for At Least once: ");
+            int x = sc.nextInt();
+            if(x==1)
+                {
+                    ATMOSTFLAG = true;System.out.println("At Most Once Mode Activated.");
+                }
+            else
+                {
+                    ATMOSTFLAG = false; System.out.println("At least once Mode Activated.");
+                }
 
-        InetAddress tp = InetAddress.getLocalHost();
-        System.out.println("IP Address:- " + tp.getHostAddress());
-        System.out.println("Host Name:- " + tp.getHostName());}
+            InetAddress tp = InetAddress.getLocalHost();
+            System.out.println("IP Address:- " + tp.getHostAddress());
+            System.out.println("Host Name:- " + tp.getHostName());}
         catch(Exception e)
         {
             System.out.println("Client Constructor Fault.");
