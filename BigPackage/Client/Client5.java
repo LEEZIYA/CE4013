@@ -88,7 +88,7 @@ public class Client5{
                     while(true)
                     {
                         socket.receive(response);
-                        if(Math.random()<thres){
+                        if(Math.random()<=thres){
                             break;}
                         else
                             System.out.println("Simulated fault.");
@@ -162,7 +162,7 @@ public void startMonitor(byte[] b){ //USAGE : Used to send message of byte refer
         while(true)
         {
             socket.receive(response);
-            if(Math.random()<thres)
+            if(Math.random()<=thres)
                 break;
             else
                 System.out.println("Simulated Fault.");
