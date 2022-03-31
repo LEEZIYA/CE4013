@@ -117,6 +117,7 @@ public class MarshUtil{
     }
 
     public static void marshCharArray(char[] data, byte[] out, BufferPointer bufPt){
+        // asuming one char = one byte (ascii input)
         String dataStr = new String(data);
         byte[] result = dataStr.getBytes(CHARSET);
         for (int i = 0; i < result.length; i++){
@@ -126,7 +127,7 @@ public class MarshUtil{
     }
 
     public static char[] unmarshCharArray(byte[] data, int length, BufferPointer bufPt){
-        // note: assumption here is that one char = one byte (in utf-8, ascii characters use only 1 byte)
+        // asuming one char = one byte (ascii input)
         byte[] charData = new byte[length];
         for (int i = 0; i < length; i++){
             charData[i] = data[bufPt.at + i];
