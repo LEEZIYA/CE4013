@@ -1,5 +1,7 @@
 package BigPackage.Client;
 
+import BigPackage.AccountInfo;
+
 public class ClientController {
 	private ClientInterface clientUI;
 	private ClientService clientService;

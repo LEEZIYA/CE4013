@@ -4,8 +4,8 @@ javac BigPackage/CurrencyType.java
 javac BigPackage/BufferPointer.java
 javac BigPackage/MarshUtil.java
 javac BigPackage/MarshBuffer.java
+javac BigPackage/AccountInfo.java
 
-javac BigPackage/Client/AccountInfo.java
 javac BigPackage/Client/Response.java
 javac BigPackage/Client/Client5.java
 javac BigPackage/Client/ClientInterface.java

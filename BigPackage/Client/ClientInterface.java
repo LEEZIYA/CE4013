@@ -1,5 +1,6 @@
 package BigPackage.Client;
 
+import BigPackage.AccountInfo;
 import BigPackage.CurrencyType;
 import java.util.Scanner;
 

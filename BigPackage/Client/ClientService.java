@@ -1,5 +1,6 @@
 package BigPackage.Client;
 
+import BigPackage.AccountInfo;
 import BigPackage.MarshBuffer;
 
 import BigPackage.MarshUtil;
