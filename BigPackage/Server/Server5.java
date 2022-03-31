@@ -95,7 +95,7 @@ public class Server5{
             while(true)
             {
                 socket.receive(request);
-                if(Math.random()<thres)
+                if(Math.random()<=thres)
                 {   
                     break;
                 }
