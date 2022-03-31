@@ -111,7 +111,7 @@ public class Server5{
             int MsgID = MarshUtil.unmarshInt(MID, new BufferPointer());
 
 
-            if(ATMOSTFLAG=true){
+            if(ATMOSTFLAG==true){
 
                         for(int i = 0; i<=xx;i++)
                         {
