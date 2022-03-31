@@ -17,25 +17,16 @@ public class ServerController {
         }
     }
 
-    public void start() throws Exception{
-        // initialize UDP socket
-
-        int countdown = 10000;
-        byte[] requestBuf = new byte[MAX_REQUEST_BUF_SIZE];
-
-
+    public void run() throws Exception{
         while (true){
-            countdown -= 100;
-            if (countdown == 0){
-                System.out.println("Server still listening.");
-                countdown = 10000;
-            }
-
-            requestBuf = serverSocket.serverMsgWait();
+            // get new request bytes
+            byte[] requestBuf = serverSocket.serverMsgWait();
 
             // reset the buffer pointers
             service.acceptNewRequest(requestBuf);
             String broadcastString = "";
+
+            // handle request
             try{
                 int requestType = service.decodeRequestType();
                 switch (requestType){
@@ -71,17 +62,16 @@ public class ServerController {
                 service.addFailureResponse("Server error");
             }
 
+            // send response
             byte[] response = service.getResponse();
             serverSocket.serverMsgSend(response);
 
+            // broadcast update
             if (broadcastString != ""){
                 System.out.println("broadcast string is: " + broadcastString);
                 byte[] broadcastBytes = service.marshalBroadcastString(broadcastString);
-                // System.out.println("broadcastBytes: " + Arrays.toString(broadcastBytes));
                 serverSocket.broadcastList(broadcastBytes);
             }
-
-            Thread.sleep(100);
         }
     }
 

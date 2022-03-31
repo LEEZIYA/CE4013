@@ -71,7 +71,7 @@ public class ClientController {
 	public void withdrawMoney(){
 		AccountInfo withdrawAccount = this.clientUI.withdrawMoney();
 		Response response = this.clientService.withdrawMoney(withdrawAccount);
-		this.clientUI.moneyDepositResult(response);
+		this.clientUI.moneyWithdrawalResult(response);
 		return;
 	}
 	public void monitorUpdate(){

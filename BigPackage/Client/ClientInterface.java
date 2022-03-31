@@ -27,6 +27,7 @@ public class ClientInterface {
 	}
 
 	public int startMenu() {
+		System.out.println();
 		System.out.println("Thank you for using the DSB client");
 		System.out.println("Below is the list of services available:");
 		
