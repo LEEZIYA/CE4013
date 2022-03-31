@@ -3,6 +3,7 @@ import java.io.*;
 import java.net.*;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Enumeration;
 import java.net.InetAddress;
 import java.util.Scanner;
 import BigPackage.BufferPointer;
@@ -43,10 +44,22 @@ public class Server5{
                 ATMOSTFLAG = false; System.out.println("At least once Mode Activated.");
             }
 
-        InetAddress tp = InetAddress.getLocalHost();
-        System.out.println("IP Address:- " + tp.getHostAddress());
-        System.out.println("Host Name:- " + tp.getHostName());
-        
+        String ip = "";
+        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+        while (interfaces.hasMoreElements()) {
+            NetworkInterface iface = interfaces.nextElement();
+            // filters out 127.0.0.1 and inactive interfaces
+            if (iface.isLoopback() || !iface.isUp())
+                continue;
+
+            Enumeration<InetAddress> addresses = iface.getInetAddresses();
+            while(addresses.hasMoreElements()) {
+                InetAddress addr = addresses.nextElement();
+                ip = addr.getHostAddress();
+            }
+        }
+        System.out.println("The server IP for connection is: "+ip);
+
         System.out.println("Please enter the success rate of receiving communications (To be edited for fault tolerance measures). Choose a value BETWEEN 0.00 (0% Success) and 1.00 (100% success): ");
         thres = sc.nextDouble();
 
